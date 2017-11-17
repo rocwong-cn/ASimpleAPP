@@ -4,6 +4,6 @@
  */
 
 export default {
-    FONT_COLOR: '#232a32',
-
+    FONT_COLOR: '#333',
+    BG_COLOR:'#fff',
 }

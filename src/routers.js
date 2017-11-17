@@ -33,7 +33,7 @@ const reducerCreate = params => {
 };
 
 const getSceneStyle = () => ({
-    backgroundColor: '#F5FCFF',
+    backgroundColor: '#f5f5f5',
     shadowOpacity: 1,
     shadowRadius: 3,
 });

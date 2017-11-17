@@ -4,7 +4,9 @@ import { Actions } from 'react-native-router-flux';
 import NavBar from '../../components/widgets/NavBar';
 import { observer, inject } from 'mobx-react';
 import Carousel from '../../components/widgets/Carousel';
-import core from '../../utils/coreUtil';
+import * as core from '../../utils/coreUtil';
+import NewsItem from '../../components/vendors/NewsItem';
+import XFlatList from '../../components/widgets/XFlatList';
 
 
 @inject('themeStore')
@@ -14,7 +16,12 @@ export default class extends React.Component {
     constructor(props) {
         super(props);
         // 初始状态
-        this.state = {};
+        this.state = {
+            navBg: 'transparent',
+        };
+
+        this._renderRow = this._renderRow.bind(this);
+        this._handleScroll = this._handleScroll.bind(this);
     }
 
     componentDidMount() {
@@ -22,14 +29,23 @@ export default class extends React.Component {
     }
 
     render() {
+        const { themeStore } = this.props;
+        const { navBg } = this.state;
         return (
             <View style={styles.container}>
-                <NavBar leftIcon={'bars'} leftPress={Actions.drawerOpen} title={'首页'}/>
-                <ScrollView>
+                <NavBar bgColor={navBg} leftIcon={'bars'} leftPress={Actions.drawerOpen} title={'首页'}/>
+                <ScrollView onScroll={this._handleScroll} showsVerticalScrollIndicator={false}
+                            scrollEventThrottle={100}>
                     {this._renderCarousel()}
+                    <XFlatList data={themeStore.latestNews} refreshing={false} renderItem={this._renderRow}/>
                 </ScrollView>
             </View>
         );
+    }
+
+    _renderRow(data) {
+        const row = data.item;
+        return <NewsItem title={row.title} cover={{ uri: row.images[0] }}/>
     }
 
     _renderCarousel() {
@@ -40,8 +56,7 @@ export default class extends React.Component {
             bulletStyle={styles.bulletStyle}
             chosenBulletStyle={[styles.bulletStyle, { backgroundColor: '#fff' }]}
             autoplay={true}
-            bullets={true}
-            onAnimateNextPage={(p) => console.log(p)}>
+            bullets={true}>
             {themeStore.topNews.map((item, i) => {
                 return <TouchableOpacity key={i} activeOpacity={0.9}>
                     <Text style={styles.title}>{item.title}</Text>
@@ -50,6 +65,15 @@ export default class extends React.Component {
             })}
         </Carousel>
     }
+
+    _handleScroll(event) {
+        let positionY = event.nativeEvent.contentOffset.y;
+        if (positionY > 0) {
+            this.setState({ navBg: '#rgba(25,145,212,' + positionY / 80 + ')' });
+        } else {
+            this.setState({ navBg: 'transparent' });
+        }
+    }
 }
 const styles = StyleSheet.create({
     container: {
@@ -57,7 +81,7 @@ const styles = StyleSheet.create({
     },
     topImg: {
         width: core.size.width,
-        height: 240
+        height: 200
     },
     bulletStyle: {
         backgroundColor: 'rgba(255,255,255,0.5)',
@@ -77,8 +101,8 @@ const styles = StyleSheet.create({
         flexWrap: 'wrap',
         fontSize: 20,
         fontWeight: '500',
-        paddingHorizontal:20,
-        lineHeight:22
+        paddingHorizontal: 20,
+        lineHeight: 22
 
     }
 });

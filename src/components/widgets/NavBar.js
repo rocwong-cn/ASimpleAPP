@@ -18,7 +18,7 @@ export default class NavBar extends Component {
         rightIcon: PropTypes.string,
         leftPress: PropTypes.func,
         rightPress: PropTypes.func,
-        bgColor: PropTypes.string
+        bgColor: PropTypes.string,
     };
 
     render() {
@@ -29,7 +29,8 @@ export default class NavBar extends Component {
             </TouchableOpacity>
             <Text style={styles.title}>{title}</Text>
             <TouchableOpacity style={styles.button} onPress={rightPress}>
-                {rightIcon && <Icon name={rightIcon} size={20} color={'#fff'}/>}
+                {rightIcon &&
+                <Icon name={rightIcon} style={{ backgroundColor: 'transparent' }} size={20} color={'#fff'}/>}
             </TouchableOpacity>
         </View>
     }
