@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { AppRegistry, StatusBar } from 'react-native';
 import { Provider } from 'mobx-react';
 import stores from './src/stores';
-import Routers from './src/router';
+import Routers from './src/routers';
 
 export default class ASimpleAPP extends Component {
     // 构造

@@ -18,11 +18,10 @@ import {
     Stack,
     Lightbox,
 } from 'react-native-router-flux';
-import Home from '../containers/home';
-import DrawerContent from './DrawerContent';
+import Home from './containers/home/index';
+import DrawerContent from './containers/Drawer';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import MenuIcon from '../images/menu_burger.png';
-import { size } from '../utils/coreUtil';
+import { size } from './utils/coreUtil';
 
 
 const reducerCreate = params => {
@@ -42,10 +41,8 @@ const DRAWER_WIDTH = size.width * 0.5 + 50;
 const Routers = () => (
     <Router createReducer={reducerCreate} getSceneStyle={getSceneStyle}>
         <Stack hideNavBar key="root" titleStyle={{ alignSelf: 'center' }}>
-            <Drawer key="drawer" contentComponent={DrawerContent}
-                    drawerIcon={<Icon name="bars" size={20} color="#000"/>}
-                    drawerWidth={DRAWER_WIDTH}>
-                <Scene key="home" component={Home} title="Home"/>
+            <Drawer key="drawer" contentComponent={DrawerContent} drawerWidth={DRAWER_WIDTH}>
+                <Scene hideNavBar key="home" component={Home} title="Home"/>
             </Drawer>
         </Stack>
     </Router>

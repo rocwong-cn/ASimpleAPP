@@ -12,6 +12,7 @@ module.exports = {
     THEME: THEME_MODE === 'light' ? light : dark,
 
     DRAWER_BG_COLOR: '#232a32',
+    DRAWER_BG_SELECTED_COLOR: '#1B222A',
     DRAWER_FONT_COLOR: 'rgba(255,255,255,0.6)',
 
 };

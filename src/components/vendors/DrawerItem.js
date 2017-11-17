@@ -13,12 +13,15 @@ export default class DrawerItem extends Component {
     static propTypes = {
         title: PropTypes.string.isRequired,
         leftIcon: PropTypes.string,
-        rightIcon: PropTypes.string.isRequired
+        rightIcon: PropTypes.string.isRequired,
+        onTap: PropTypes.func,
+        isSelected: PropTypes.bool,
     };
 
     render() {
-        const { leftIcon, title, rightIcon } = this.props;
-        return <TouchableOpacity style={styles.container}>
+        const { leftIcon, title, rightIcon, onTap, isSelected } = this.props;
+        const selectedStyle = isSelected && { backgroundColor: core.DRAWER_BG_SELECTED_COLOR };
+        return <TouchableOpacity onPress={onTap} style={[styles.container, selectedStyle]}>
             <View style={styles.left}>
                 {leftIcon && <Icon style={styles.icon} name={leftIcon} size={20} color={core.DRAWER_FONT_COLOR}/>}
                 <Text style={styles.title}>{title}</Text>
