@@ -14,6 +14,7 @@
     "prop-types": "^15.6.0",
     "react": "16.0.0",
     "react-native": "0.50.3",
+    "react-native-parallax-view": "github:rocwangv/react-native-parallax-view",
     "react-native-router-flux": "^4.0.0-beta.24",
     "react-native-vector-icons": "^4.4.2"
   },

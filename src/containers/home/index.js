@@ -18,27 +18,41 @@ export default class extends React.Component {
         // 初始状态
         this.state = {
             navBg: 'transparent',
+            beforeDay: core.getToday(),
+            beforeNews: [],
+            canLoad: false,
+            paging: false,
+            refreshing: false,
         };
 
         this._renderRow = this._renderRow.bind(this);
+        this._onPage = this._onPage.bind(this);
         this._handleScroll = this._handleScroll.bind(this);
+        this._onInitData = this._onInitData.bind(this);
     }
 
     componentDidMount() {
+        this._onInitData();
+    }
+
+    _onInitData() {
+        this.setState({ beforeDay: core.getToday(), beforeNews: [], refreshing: false });
         this.props.themeStore.getLatestNews();
+
+        this.props.themeStore.getBeforeNews(this.state.beforeDay).then(res => {
+            this.setState({ beforeNews: res.stories, beforeDay: res.date, refreshing: true });
+        });
     }
 
     render() {
         const { themeStore } = this.props;
-        const { navBg } = this.state;
+        const { navBg, beforeNews, paging } = this.state;
         return (
             <View style={styles.container}>
                 <NavBar bgColor={navBg} leftIcon={'bars'} leftPress={Actions.drawerOpen} title={'首页'}/>
-                <ScrollView onScroll={this._handleScroll} showsVerticalScrollIndicator={false}
-                            scrollEventThrottle={100}>
-                    {this._renderCarousel()}
-                    <XFlatList data={themeStore.latestNews} refreshing={false} renderItem={this._renderRow}/>
-                </ScrollView>
+                <XFlatList data={themeStore.latestNews.concat(beforeNews)} headerComponent={this._renderCarousel()}
+                           refreshing={false} onScroll={this._handleScroll} paging={paging} onRefresh={this._onInitData}
+                           renderItem={this._renderRow} onPage={this._onPage}/>
             </View>
         );
     }
@@ -46,6 +60,21 @@ export default class extends React.Component {
     _renderRow(data) {
         const row = data.item;
         return <NewsItem title={row.title} cover={{ uri: row.images[0] }}/>
+    }
+
+    _onPage() {
+        const { canLoad, beforeNews, beforeDay, paging } = this.state;
+        if (beforeNews.length === 0 || paging) {
+            return;
+        }
+        if (canLoad) {
+            this.setState({ paging: true });
+            setTimeout(() => {
+                this.props.themeStore.getBeforeNews(beforeDay).then(res => {
+                    this.setState({ beforeNews: beforeNews.concat(res.stories), beforeDay: res.date, paging: false });
+                });
+            }, 1000);
+        }
     }
 
     _renderCarousel() {
@@ -67,6 +96,7 @@ export default class extends React.Component {
     }
 
     _handleScroll(event) {
+        this.setState({ canLoad: true });
         let positionY = event.nativeEvent.contentOffset.y;
         if (positionY > 0) {
             this.setState({ navBg: '#rgba(25,145,212,' + positionY / 80 + ')' });

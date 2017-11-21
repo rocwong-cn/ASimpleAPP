@@ -1,5 +1,5 @@
 # A Simple APP
-> It's a project that records my exprience to learn mobx and react-native-router-flux , REACT-NATIVE based. As all know , redux is the first choice to manage state of react-native, and I wrote many projects in last year with redux. So, for learing mobx ,I wrote this.
+> It's a project that records my exprience to learn mobx and react-native-router-flux , REACT-NATIVE based. As all known , redux is the first choice to manage state of react-native, and I wrote many projects in last year with redux. So, for learing mobx ,I wrote this.
 
 ## Screenshot
 

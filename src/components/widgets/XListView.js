@@ -1,43 +1,34 @@
 /**
- * Created by Roc on 2017/4/1.
+ * Created by Roc on 2017/11/3.
  */
 
-import React, { PureComponent } from 'react';
-import { ActivityIndicator, FlatList, Text, TouchableOpacity, View, StyleSheet } from 'react-native';
-import PropTypes from 'prop-types';
+import React, { Component } from 'react';
+import { ActivityIndicator, ListView, RefreshControl, Text, TouchableOpacity, View, StyleSheet } from 'react-native';
+import PropTypes from 'prop-types'
 
-export default class XFlatList extends PureComponent {
+export default class XListView extends Component {
     // 构造
     constructor(props) {
         super(props);
     }
 
     static propTypes = {
-        data: PropTypes.any.isRequired,
+        dataSource: PropTypes.any.isRequired,
         contentContainerStyle: PropTypes.any,
-        renderItem: PropTypes.func.isRequired,
+        renderRow: PropTypes.func.isRequired,
         refreshing: PropTypes.bool.isRequired,//是否显示下拉刷新指示器
         paging: PropTypes.bool,//是否显示加载更多指示器
         noMore: PropTypes.bool,//没有更多
         onPage: PropTypes.func,//翻页函数
         onRefresh: PropTypes.func,//下拉刷新函数
         onScroll: PropTypes.func,
-        getItemLayout: PropTypes.func,
-        headerComponent: PropTypes.any,
-        footerComponent: PropTypes.any,
-        separatorComponent: PropTypes.any,
-        extra: PropTypes.any
     };
 
     render() {
-        const {
-            data, headerComponent, footerComponent, separatorComponent,
-            extra, onRefresh, refreshing, onPage, renderItem, onScroll,
-            getItemLayout
-        } = this.props;
-
+        const { dataSource, renderRow, onPage, refreshing, onRefresh, onScroll, contentContainerStyle } = this.props;
         let view;
-        if (!refreshing && data.length === 0) {
+
+        if (!refreshing && dataSource.getRowCount() === 0) {
             view =
                 <TouchableOpacity
                     style={styles.noDataView}
@@ -46,33 +37,42 @@ export default class XFlatList extends PureComponent {
                     <Text style={styles.noDataTxt}>暂无记录</Text>
                 </TouchableOpacity>;
         } else {
-            view = <FlatList ListHeaderComponent={headerComponent}
-                             ItemSeparatorComponent={this._renderSeparator}
-                             extraData={extra}
-                             keyExtractor={this._keyExtractor}
-                             onRefresh={onRefresh}
-                             refreshing={refreshing}
-                             onScroll={onScroll}
-                             onEndReachedThreshold={0.1}
-                             onEndReached={onPage}
-                             ListFooterComponent={footerComponent || this._renderFooter()}
-                             renderItem={renderItem}
-                             getItemLayout={getItemLayout}
-                             data={data}/>
+            let refreshCtrl = this._renderRefreshCtrl();
+            view = <ListView
+                contentContainerStyle={contentContainerStyle}
+                dataSource={dataSource}
+                renderRow={renderRow}
+                enableEmptySections={true}
+                onScroll={onScroll}
+                onEndReached={onPage}
+                onEndReachedThreshold={10}
+                renderFooter={this._renderFooter.bind(this)}
+                refreshControl={refreshCtrl}
+                removeClippedSubviews={false}
+            />
         }
         return (view)
     }
 
-    _renderSeparator = () => {
-        return <View style={styles.separator}/>
-    };
-
-    _keyExtractor(data, index) {
-        return index;
+    _renderRefreshCtrl() {
+        const { onRefresh, refreshing } = this.props;
+        if (onRefresh) {
+            return <RefreshControl
+                refreshing={refreshing}
+                onRefresh={onRefresh}
+                tintColor="#666"
+                title="加载中..."
+                titleColor="#666"
+                progressBackgroundColor="transparent"
+                colors={['#666', '#666', '#666']}
+            />;
+        }
+        return null;
     }
 
     _renderFooter() {
         const { paging, noMore, refreshing } = this.props;
+
         if (paging) {
             return (<View style={styles.footer}>
                     <ActivityIndicator
@@ -88,14 +88,15 @@ export default class XFlatList extends PureComponent {
                 </View>
             )
         }
+
     }
 }
+
 const styles = StyleSheet.create({
     noDataView: { flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: '#f9f9f9' },
     noDataTxt: { color: '#999' },
     footer: { justifyContent: 'center', alignItems: 'center' },
     loading: { color: '#646464', fontSize: 12 },
     refresh: { justifyContent: 'center', alignItems: 'center', paddingVertical: 20 },
-    noMore: { color: '#646464' },
-    separator: { borderBottomWidth: StyleSheet.hairlineWidth, borderBottomColor: '#ddd' }
+    noMore: { color: '#646464' }
 });

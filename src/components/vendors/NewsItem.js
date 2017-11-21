@@ -30,8 +30,6 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         paddingVertical: 10,
         paddingHorizontal: 15,
-        borderBottomColor: '#ddd',
-        borderBottomWidth: StyleSheet.hairlineWidth,
         height: 102,
         backgroundColor: core.THEME.BG_COLOR
     },
