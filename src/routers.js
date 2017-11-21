@@ -3,24 +3,10 @@
  * desc:
  */
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
-import CardStackStyleInterpolator from 'react-navigation/src/views/CardStack/CardStackStyleInterpolator';
-import {
-    Scene,
-    Router,
-    Actions,
-    Reducer,
-    ActionConst,
-    Overlay,
-    Tabs,
-    Modal,
-    Drawer,
-    Stack,
-    Lightbox,
-} from 'react-native-router-flux';
+import { Drawer, Reducer, Router, Scene, Stack } from 'react-native-router-flux';
 import Home from './containers/home/index';
+import NewsDetail from './containers/home/NewsDetail';
 import DrawerContent from './containers/Drawer';
-import Icon from 'react-native-vector-icons/FontAwesome';
 import { size } from './utils/coreUtil';
 
 
@@ -42,7 +28,8 @@ const Routers = () => (
     <Router createReducer={reducerCreate} getSceneStyle={getSceneStyle}>
         <Stack hideNavBar key="root" titleStyle={{ alignSelf: 'center' }}>
             <Drawer key="drawer" contentComponent={DrawerContent} drawerWidth={DRAWER_WIDTH}>
-                <Scene hideNavBar key="home" component={Home} title="Home"/>
+                <Scene hideNavBar key="home" component={Home}/>
+                <Scene hideNavBar key="newsDetail"  component={NewsDetail}/>
             </Drawer>
         </Stack>
     </Router>

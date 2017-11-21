@@ -59,7 +59,8 @@ export default class extends React.Component {
 
     _renderRow(data) {
         const row = data.item;
-        return <NewsItem title={row.title} cover={{ uri: row.images[0] }}/>
+        return <NewsItem onTap={() => Actions.newsDetail({ newsId: row.id })} title={row.title}
+                         cover={{ uri: row.images[0] }}/>
     }
 
     _onPage() {
