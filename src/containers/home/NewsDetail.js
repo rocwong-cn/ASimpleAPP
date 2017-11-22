@@ -3,14 +3,24 @@
  * desc:
  */
 import React from 'react';
-import { View, StyleSheet, Image, ScrollView, Text } from 'react-native';
+import { View, StyleSheet, Image, ScrollView, Text, WebView, ImageBackground } from 'react-native';
 import { observer, inject } from 'mobx-react';
-import ParallaxView from 'react-native-parallax-view';
+import * as core from '../../utils/coreUtil';
+import IconButton from '../../components/widgets/IconButton';
+import { Actions } from 'react-native-router-flux';
 
 
 @inject('themeStore')
 @observer
 export default class NewsDetail extends React.Component {
+    // 构造
+    constructor(props) {
+        super(props);
+        // 初始状态
+        this.state = {};
+
+        this._onMessage = this._onMessage.bind(this);
+    }
 
     componentDidMount() {
         const { themeStore, newsId } = this.props;
@@ -19,17 +29,29 @@ export default class NewsDetail extends React.Component {
 
     render() {
         const { themeStore } = this.props;
-        console.log(themeStore.newsDetail);
-        return <ParallaxView
-            backgroundSource={{ uri: themeStore.newsDetail.image }}
-            windowHeight={200}
-            header={this._renderHeader(themeStore.newsDetail)}
-            scrollableViewStyle={{ backgroundColor: 'red' }}
-        >
-            <View>
-
-            </View>
-        </ParallaxView>
+        const css = themeStore.newsDetail.css ? themeStore.newsDetail.css[0] : '';
+        let html = '<!DOCTYPE html><html><head><link rel="stylesheet" type="text/css" href="'
+            + css + '" /></head><body>' + themeStore.newsDetail.body +
+            '</body></html>';
+        html = html.replace('<script type=“text/javascript”>window.daily=true</script>', '<script type="text/javascript">function waitForBridge() {if (window.postMessage.length !== 1){setTimeout(waitForBridge, 200);}else {window.postMessage(window.scrollY+"")}} window.onload = waitForBridge; window.onscroll = function () { window.postMessage(window.scrollY+"")}</script>');
+        return <View style={styles.container}>
+            <ImageBackground
+                style={{ height: 220, width: core.size.width, position: 'absolute', top: 0, left: 0, zIndex: 99 }}
+                source={{ uri: themeStore.newsDetail.image }}>
+                {this._renderHeader(themeStore.newsDetail)}
+            </ImageBackground>
+            <WebView
+                automaticallyAdjustContentInsets={true}
+                style={styles.webView}
+                source={{ html: html }}
+                javaScriptEnabled={true}
+                domStorageEnabled={true}
+                decelerationRate="normal"
+                scalesPageToFit={false}
+                onMessage={this._onMessage}
+            />
+            {this._renderToolBar()}
+        </View>
     }
 
     _renderHeader(detail) {
@@ -37,6 +59,20 @@ export default class NewsDetail extends React.Component {
             <Text style={styles.title}>{detail.title}</Text>
             <Text style={styles.source}>{detail.image_source || ''}</Text>
         </View>
+    }
+
+    _renderToolBar(){
+        return <View style={styles.toolbar}>
+            <IconButton icon={'angle-left'} onTap={Actions.pop}/>
+            <IconButton icon={'angle-down'} />
+            <IconButton icon={'thumbs-o-up'} />
+            <IconButton icon={'share-square-o'} />
+            <IconButton icon={'commenting-o'} />
+        </View>
+    }
+
+    _onMessage(event) {
+        console.log('event==>', event.nativeEvent.data);
     }
 }
 
@@ -60,5 +96,16 @@ const styles = StyleSheet.create({
         bottom: 10,
         backgroundColor: 'transparent',
         color: 'rgba(255,255,255,0.6)',
+    },
+    webView: {
+        height: 350,
+    },
+    toolbar:{
+        flexDirection:'row',
+        justifyContent:'space-around',
+        backgroundColor:'#fff',
+        height:50,
+        borderTopColor:'#e7e7e7',
+        borderTopWidth:StyleSheet.hairlineWidth
     }
 });

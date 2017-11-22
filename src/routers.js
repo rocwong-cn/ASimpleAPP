@@ -20,17 +20,17 @@ const reducerCreate = params => {
 
 const getSceneStyle = () => ({
     backgroundColor: '#f5f5f5',
-    shadowOpacity: 1,
-    shadowRadius: 3,
 });
 const DRAWER_WIDTH = size.width * 0.5 + 50;
 const Routers = () => (
     <Router createReducer={reducerCreate} getSceneStyle={getSceneStyle}>
         <Stack hideNavBar key="root" titleStyle={{ alignSelf: 'center' }}>
             <Drawer key="drawer" contentComponent={DrawerContent} drawerWidth={DRAWER_WIDTH}>
-                <Scene hideNavBar key="home" component={Home}/>
-                <Scene hideNavBar key="newsDetail"  component={NewsDetail}/>
+                <Scene hideNavBar key="home" component={Home} back/>
             </Drawer>
+            <Stack hideNavBar key="newsDetail">
+                <Scene hideNavBar key="newsDetail"  component={NewsDetail} back/>
+            </Stack>
         </Stack>
     </Router>
 );
