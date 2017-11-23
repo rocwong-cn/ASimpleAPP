@@ -49,6 +49,22 @@ export default class ThemeStore {
         }
 
     }
+    async getThemeNews(themeId) {
+        console.log(themeId);
+        if (!themeId) {
+            this.latestNews = [];
+        } else {
+            try {
+                const response = await axios.get(api.API_THEME_NEWS + themeId);
+                this.latestNews = response.data.stories;
+                return response.data;
+            } catch (e) {
+                console.log(e);
+                Alert.alert('连接异常', ERR_MSG);
+            }
+        }
+
+    }
 
     async getNewsDetail(newsId) {
         if (!newsId) {

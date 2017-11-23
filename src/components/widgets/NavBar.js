@@ -7,7 +7,6 @@ import React, { Component } from 'react';
 import { View, TouchableOpacity, Text, StyleSheet } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import PropTypes from 'prop-types';
-import { NAV_BG_COLOR } from '../../themes/core';
 
 const H = 65;
 const W = 50;

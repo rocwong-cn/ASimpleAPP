@@ -3,12 +3,12 @@
  * desc:
  */
 import React from 'react';
-import { View, StyleSheet, Image, ScrollView, Text, WebView, ImageBackground } from 'react-native';
-import { observer, inject } from 'mobx-react';
+import { StatusBar, StyleSheet, Text, View, WebView } from 'react-native';
+import { inject, observer } from 'mobx-react';
 import * as core from '../../utils/coreUtil';
 import IconButton from '../../components/widgets/IconButton';
 import { Actions } from 'react-native-router-flux';
-
+import ParallaxView from 'react-native-parallax-view';
 
 @inject('themeStore')
 @observer
@@ -17,9 +17,13 @@ export default class NewsDetail extends React.Component {
     constructor(props) {
         super(props);
         // 初始状态
-        this.state = {};
+        this.state = {
+            windowHeight: 0,
+            statusBarBG: 'transparent'
+        };
 
         this._onMessage = this._onMessage.bind(this);
+        this._onScroll = this._onScroll.bind(this);
     }
 
     componentDidMount() {
@@ -29,28 +33,35 @@ export default class NewsDetail extends React.Component {
 
     render() {
         const { themeStore } = this.props;
+        const { statusBarBG, windowHeight } = this.state;
         const css = themeStore.newsDetail.css ? themeStore.newsDetail.css[0] : '';
         let html = '<!DOCTYPE html><html><head><link rel="stylesheet" type="text/css" href="'
             + css + '" /></head><body>' + themeStore.newsDetail.body +
             '</body></html>';
-        html = html.replace('<script type=“text/javascript”>window.daily=true</script>', '<script type="text/javascript">function waitForBridge() {if (window.postMessage.length !== 1){setTimeout(waitForBridge, 200);}else {window.postMessage(window.scrollY+"")}} window.onload = waitForBridge; window.onscroll = function () { window.postMessage(window.scrollY+"")}</script>');
+
+        //替换原有的脚本，新增获取窗口高度的脚本
+        html = html.replace('<script type=“text/javascript”>window.daily=true</script>',
+            '<script type="text/javascript">window.daily=true;function waitForBridge() {if (window.postMessage.length !== 1){setTimeout(waitForBridge, 200);}else {window.postMessage(document.body.scrollHeight+"")}} window.onload = waitForBridge; </script>');
+        html = html.replace('img-place-holder', '');//剔除顶部的图片占位区
         return <View style={styles.container}>
-            <ImageBackground
-                style={{ height: 220, width: core.size.width, position: 'absolute', top: 0, left: 0, zIndex: 99 }}
-                source={{ uri: themeStore.newsDetail.image }}>
-                {this._renderHeader(themeStore.newsDetail)}
-            </ImageBackground>
-            <WebView
-                automaticallyAdjustContentInsets={true}
-                style={styles.webView}
-                source={{ html: html }}
-                javaScriptEnabled={true}
-                domStorageEnabled={true}
-                decelerationRate="normal"
-                scalesPageToFit={false}
-                onMessage={this._onMessage}
-            />
+            <View style={[{ backgroundColor: statusBarBG }, styles.statusBar]}/>
+            <ParallaxView
+                backgroundSource={{ uri: themeStore.newsDetail.image }}
+                windowHeight={200}
+                header={this._renderHeader(themeStore.newsDetail)} onScroll={this._onScroll}>
+                <WebView
+                    automaticallyAdjustContentInsets={true}
+                    style={{ height: windowHeight }}
+                    source={{ html: html }}
+                    javaScriptEnabled={true}
+                    domStorageEnabled={true}
+                    decelerationRate="normal"
+                    scalesPageToFit={false} scrollEnabled={false}
+                    onMessage={this._onMessage}
+                />
+            </ParallaxView>
             {this._renderToolBar()}
+
         </View>
     }
 
@@ -61,18 +72,33 @@ export default class NewsDetail extends React.Component {
         </View>
     }
 
-    _renderToolBar(){
+    _renderToolBar() {
         return <View style={styles.toolbar}>
             <IconButton icon={'angle-left'} onTap={Actions.pop}/>
-            <IconButton icon={'angle-down'} />
-            <IconButton icon={'thumbs-o-up'} />
-            <IconButton icon={'share-square-o'} />
-            <IconButton icon={'commenting-o'} />
+            <IconButton icon={'angle-down'}/>
+            <IconButton icon={'thumbs-o-up'}/>
+            <IconButton icon={'share-square-o'}/>
+            <IconButton icon={'commenting-o'}/>
         </View>
     }
 
     _onMessage(event) {
-        console.log('event==>', event.nativeEvent.data);
+        if (event.nativeEvent && event.nativeEvent.data) {
+            this.setState({ windowHeight: parseFloat(event.nativeEvent.data) });
+        } else {
+            this.setState({ windowHeight: core.size.height });
+        }
+    }
+
+    _onScroll(event) {
+        let positionY = event.nativeEvent.contentOffset.y;
+        if (positionY >= 200) {
+            StatusBar.setBarStyle('default', false);
+            this.setState({ statusBarBG: '#f9f9f9' });
+        } else {
+            StatusBar.setBarStyle('light-content', false);
+            this.setState({ statusBarBG: 'transparent' });
+        }
     }
 }
 
@@ -97,15 +123,20 @@ const styles = StyleSheet.create({
         backgroundColor: 'transparent',
         color: 'rgba(255,255,255,0.6)',
     },
-    webView: {
-        height: 350,
+    toolbar: {
+        flexDirection: 'row',
+        justifyContent: 'space-around',
+        backgroundColor: '#fff',
+        height: 50,
+        borderTopColor: '#e7e7e7',
+        borderTopWidth: StyleSheet.hairlineWidth
     },
-    toolbar:{
-        flexDirection:'row',
-        justifyContent:'space-around',
-        backgroundColor:'#fff',
-        height:50,
-        borderTopColor:'#e7e7e7',
-        borderTopWidth:StyleSheet.hairlineWidth
+    statusBar: {
+        height: 20,
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        width: core.size.width,
+        zIndex: 99
     }
 });
