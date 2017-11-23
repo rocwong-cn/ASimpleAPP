@@ -4,10 +4,12 @@
  */
 import React from 'react';
 import { Drawer, Reducer, Router, Scene, Stack } from 'react-native-router-flux';
+import DrawerContent from './containers/Drawer';
 import Home from './containers/home/index';
 import NewsDetail from './containers/home/NewsDetail';
-import DrawerContent from './containers/Drawer';
+import CommentList from './containers/home/CommentList';
 import { size } from './utils/coreUtil';
+import { BLUE } from './themes/core';
 
 
 const reducerCreate = params => {
@@ -28,8 +30,9 @@ const Routers = () => (
             <Drawer key="drawer" contentComponent={DrawerContent} drawerWidth={DRAWER_WIDTH}>
                 <Scene hideNavBar key="home" component={Home} back/>
             </Drawer>
-            <Stack hideNavBar key="newsDetail">
-                <Scene hideNavBar key="newsDetail"  component={NewsDetail} back/>
+            <Stack  key="newsDetail">
+                <Scene hideNavBar key="newsDetail" component={NewsDetail} back/>
+                <Scene backButtonTintColor="#fff" title="" titleStyle={{color:'#fff'}} navigationBarStyle={{backgroundColor:BLUE}} key="commentList" component={CommentList} back/>
             </Stack>
         </Stack>
     </Router>

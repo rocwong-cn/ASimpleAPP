@@ -29,6 +29,11 @@ export default class NewsDetail extends React.Component {
     componentDidMount() {
         const { themeStore, newsId } = this.props;
         themeStore.getNewsDetail(newsId);
+        themeStore.getStoryExtra(newsId);
+    }
+
+    componentWillUnmount() {
+        StatusBar.setBarStyle('light-content', false);
     }
 
     render() {
@@ -48,7 +53,8 @@ export default class NewsDetail extends React.Component {
             <ParallaxView
                 backgroundSource={{ uri: themeStore.newsDetail.image }}
                 windowHeight={200}
-                header={this._renderHeader(themeStore.newsDetail)} onScroll={this._onScroll}>
+                header={this._renderHeader(themeStore.newsDetail)}
+                onScroll={this._onScroll}>
                 <WebView
                     automaticallyAdjustContentInsets={true}
                     style={{ height: windowHeight }}
@@ -73,12 +79,15 @@ export default class NewsDetail extends React.Component {
     }
 
     _renderToolBar() {
+        const { themeStore,newsId } = this.props;
+        const extra = themeStore.storyExtra;
         return <View style={styles.toolbar}>
             <IconButton icon={'angle-left'} onTap={Actions.pop}/>
             <IconButton icon={'angle-down'}/>
-            <IconButton icon={'thumbs-o-up'}/>
+            <IconButton icon={'thumbs-o-up'} badge={extra.popularity}/>
             <IconButton icon={'share-square-o'}/>
-            <IconButton icon={'commenting-o'}/>
+            <IconButton icon={'commenting-o'} badge={extra.comments}
+                        onTap={() => Actions.commentList({ title: extra.comments + '条点评',newsId:newsId })}/>
         </View>
     }
 

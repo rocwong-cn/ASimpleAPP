@@ -15,4 +15,6 @@ module.exports = {
     DRAWER_BG_SELECTED_COLOR: '#1B222A',
     DRAWER_FONT_COLOR: 'rgba(255,255,255,0.6)',
 
+    BLUE: '#2eb5ee',
+
 };
