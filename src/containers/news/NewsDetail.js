@@ -7,6 +7,7 @@ import { StatusBar, StyleSheet, Text, View, WebView } from 'react-native';
 import { inject, observer } from 'mobx-react';
 import * as core from '../../utils/coreUtil';
 import IconButton from '../../components/widgets/IconButton';
+import Loading from '../../components/widgets/Loading';
 import { Actions } from 'react-native-router-flux';
 import ParallaxView from 'react-native-parallax-view';
 
@@ -67,7 +68,7 @@ export default class NewsDetail extends React.Component {
                 />
             </ParallaxView>
             {this._renderToolBar()}
-
+            <Loading visible={themeStore.loading}/>
         </View>
     }
 

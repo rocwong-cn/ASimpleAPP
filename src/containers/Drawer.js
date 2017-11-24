@@ -20,25 +20,19 @@ class DrawerContent extends React.Component {
         };
     }
 
-    componentDidMount() {
-        this.props.themeStore.getThemeList();
-    }
-
     render() {
-        const themes = this.props.themeStore.themes;
-        const sortedThemes = _.sortBy(themes, ['id']);
         const { selectedItem } = this.state;
         return (
             <View style={styles.container}>
                 <Text style={styles.slogon}>🎈 A Simple APP .</Text>
-                <ScrollView>
+                <View style={{flex:1}}>
                     <DrawerItem title={'首页'} isSelected={'home' === selectedItem} onTap={this._toHome}
                                 rightIcon={'angle-right'} leftIcon={'home'}/>
-                    {sortedThemes.map((item, i) => {
-                        return <DrawerItem key={i} isSelected={item.id === selectedItem} title={item.name}
-                                           rightIcon={'angle-right'} onTap={this._toOther.bind(this, item.id)}/>
-                    })}
-                </ScrollView>
+                    {/*{sortedThemes.map((item, i) => {*/}
+                        {/*return <DrawerItem key={i} isSelected={item.id === selectedItem} title={item.name}*/}
+                                           {/*rightIcon={'angle-right'} onTap={this._toOther.bind(this, item.id)}/>*/}
+                    {/*})}*/}
+                </View>
                 <View style={{ flexDirection: 'row', paddingVertical: 15 }}>
                     <TouchableOpacity style={styles.button}>
                         <Icon name="download" size={20} color={core.DRAWER_FONT_COLOR}/>

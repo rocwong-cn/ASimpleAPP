@@ -5,9 +5,9 @@
 import React from 'react';
 import { Drawer, Reducer, Router, Scene, Stack,Actions } from 'react-native-router-flux';
 import DrawerContent from './containers/Drawer';
-import Home from './containers/home/index';
-import NewsDetail from './containers/home/NewsDetail';
-import CommentList from './containers/home/CommentList';
+import Home from './containers/news/index';
+import NewsDetail from './containers/news/NewsDetail';
+import CommentList from './containers/news/CommentList';
 import { size } from './utils/coreUtil';
 import { BLUE } from './themes/core';
 

@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, ScrollView, Image, } from "react-native";
+import { View, Text, StyleSheet, TouchableOpacity, StatusBar, Image, } from "react-native";
 import { Actions } from 'react-native-router-flux';
 import NavBar from '../../components/widgets/NavBar';
 import { observer, inject } from 'mobx-react';
@@ -7,7 +7,11 @@ import Carousel from '../../components/widgets/Carousel';
 import * as core from '../../utils/coreUtil';
 import NewsItem from '../../components/vendors/NewsItem';
 import XFlatList from '../../components/widgets/XFlatList';
-
+import Loading from '../../components/widgets/Loading';
+import Label from '../../components/widgets/Label';
+import DropDownPanel from '../../components/widgets/DropDownPanel';
+import _ from 'lodash';
+const BANNER_HEIGHT = 200;
 
 @inject('themeStore')
 @observer
@@ -23,6 +27,8 @@ export default class extends React.Component {
             canLoad: false,
             paging: false,
             refreshing: false,
+            positionY: 0,
+            visible: false
         };
 
         this._renderRow = this._renderRow.bind(this);
@@ -42,25 +48,51 @@ export default class extends React.Component {
         this.props.themeStore.getBeforeNews(this.state.beforeDay).then(res => {
             this.setState({ beforeNews: res.stories, beforeDay: res.date, refreshing: true });
         });
+
+        this.props.themeStore.getThemeList();
     }
 
     render() {
         const { themeStore } = this.props;
-        const { navBg, beforeNews, paging } = this.state;
+        const { navBg, beforeNews, paging, visible } = this.state;
+
+        const themes = themeStore.themes;
+        const sortedThemes = _.sortBy(themes, ['id']);
         return (
             <View style={styles.container}>
-                <NavBar bgColor={navBg} leftIcon={'bars'} leftPress={Actions.drawerOpen} title={'首页'}/>
-                <XFlatList data={themeStore.latestNews.concat(beforeNews)} headerComponent={this._renderCarousel()}
+                <NavBar bgColor={navBg} title={'首页'}
+                        leftIcon={'bars'} leftPress={Actions.drawerOpen}
+                        rightIcon={'heart'} rightPress={this._toggleThemeList.bind(this, '1')}/>
+                {this._renderCarousel()}
+                <XFlatList data={themeStore.latestNews.concat(beforeNews)} headerComponent={this._renderHeader()}
                            refreshing={false} onScroll={this._handleScroll} paging={paging} onRefresh={this._onInitData}
                            renderItem={this._renderRow} onPage={this._onPage}/>
+
+                <DropDownPanel visible={visible} height={260} onClose={this._toggleThemeList.bind(this, '2')}
+                               top={0} customStyle={styles.panel}>
+                    {sortedThemes.map((item, i) => {
+                        return <Label key={i} txt={item.name}/>
+                    })}
+                </DropDownPanel>
+
+                <Loading visible={themeStore.homeLoading}/>
             </View>
         );
+    }
+
+    _toggleThemeList(t) {
+        const visible = t === '1';
+        this.setState({ visible: visible });
     }
 
     _renderRow(data) {
         const row = data.item;
         return <NewsItem onTap={() => Actions.newsDetail({ newsId: row.id })} title={row.title}
                          cover={{ uri: row.images[0] }}/>
+    }
+
+    _renderHeader() {
+        return <View style={styles.header}/>
     }
 
     _onPage() {
@@ -80,9 +112,11 @@ export default class extends React.Component {
 
     _renderCarousel() {
         const { themeStore } = this.props;
+        const { positionY } = this.state;
+        const height = BANNER_HEIGHT - positionY;
         return <Carousel
             delay={3000}
-            style={styles.topImg}
+            style={[styles.topImg, styles.fixed, { height }]}
             bulletStyle={styles.bulletStyle}
             chosenBulletStyle={[styles.bulletStyle, { backgroundColor: '#fff' }]}
             autoplay={true}
@@ -90,7 +124,7 @@ export default class extends React.Component {
             {themeStore.topNews.map((item, i) => {
                 return <TouchableOpacity key={i} activeOpacity={0.9}>
                     <Text style={styles.title}>{item.title}</Text>
-                    <Image style={styles.topImg} source={{ uri: item.image }}/>
+                    <Image style={[styles.topImg, { height }]} source={{ uri: item.image }}/>
                 </TouchableOpacity>;
             })}
         </Carousel>
@@ -100,9 +134,9 @@ export default class extends React.Component {
         this.setState({ canLoad: true });
         let positionY = event.nativeEvent.contentOffset.y;
         if (positionY > 0) {
-            this.setState({ navBg: '#rgba(25,145,212,' + positionY / 80 + ')' });
+            this.setState({ navBg: '#rgba(25,145,212,' + positionY / 80 + ')', positionY });
         } else {
-            this.setState({ navBg: 'transparent' });
+            this.setState({ navBg: 'transparent', positionY });
         }
     }
 }
@@ -112,7 +146,13 @@ const styles = StyleSheet.create({
     },
     topImg: {
         width: core.size.width,
-        height: 200
+    },
+    fixed: {
+        position: 'absolute',
+        top: 0,
+        left: 0,
+
+        right: 0
     },
     bulletStyle: {
         backgroundColor: 'rgba(255,255,255,0.5)',
@@ -134,6 +174,18 @@ const styles = StyleSheet.create({
         fontWeight: '500',
         paddingHorizontal: 20,
         lineHeight: 22
-
+    },
+    header: {
+        width: core.size.width,
+        height: BANNER_HEIGHT,
+        backgroundColor: 'transparent',
+    },
+    panel:{
+        flexDirection:'row',
+        flexWrap:'wrap',
+        paddingTop:25,
+        alignItems:'center',
+        backgroundColor:'#232a32'
     }
+
 });

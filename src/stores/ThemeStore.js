@@ -10,6 +10,7 @@ const ERR_MSG = 'emmmm...服务器被小怪兽吃掉了...';
 export default class ThemeStore {
 
     @observable loading = false;
+    @observable homeLoading = false;
     @observable themes = [];
     @observable latestNews = [];
     @observable topNews = [];
@@ -19,10 +20,14 @@ export default class ThemeStore {
     @observable comments = [];
 
     async getThemeList() {
+        this.homeLoading = true;
         try {
             const response = await axios.get(api.API_THEMES);
             this.themes = response.data.others;
+            console.log(response.data.others);
+            this.homeLoading = false;
         } catch (e) {
+            this.homeLoading = false;
             Alert.alert('连接异常', ERR_MSG);
         }
     }
@@ -38,7 +43,6 @@ export default class ThemeStore {
     }
 
     async getBeforeNews(date) {
-        console.log(date);
         if (!date) {
             this.beforeNews = [];
         } else {
@@ -72,14 +76,18 @@ export default class ThemeStore {
     }
 
     async getNewsDetail(newsId) {
+        this.loading = true;
         if (!newsId) {
             this.newsDetail = {};
+            this.loading = false;
         } else {
             try {
                 const response = await axios.get(api.API_NEW_DETAIL + newsId);
                 this.newsDetail = response.data;
+                this.loading = false;
                 return response.data;
             } catch (e) {
+                this.loading = false;
                 console.log(e);
                 Alert.alert('连接异常', ERR_MSG);
             }
