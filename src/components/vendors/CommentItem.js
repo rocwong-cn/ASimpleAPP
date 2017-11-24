@@ -8,31 +8,38 @@ import { View, Text, Image, StyleSheet } from 'react-native';
 import PropTypes from 'prop-types';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import * as core from '../../themes/core';
+import * as coreUtil from '../../utils/coreUtil';
 
 export default class CommentItem extends Component {
     static propTypes = {
         nickname: PropTypes.string,
-        avatar: PropTypes.func,
+        likes: PropTypes.number,
+        content: PropTypes.string,
+        replyCtn: PropTypes.string,
+        reply: PropTypes.string,
+        date: PropTypes.number,
+        avatar: PropTypes.object,
     };
 
     render() {
-        const { avatar, nickname ,praise,content,reply,replyCtn,date} = this.props;
+        const { avatar, nickname, likes, content, reply, replyCtn, date } = this.props;
         return <View style={styles.container}>
-            <Image style={styles.avatar} source={avatar}/>
+            <Image style={styles.avatar} defaultSource={require('../../images/avatar.png')}
+                   resizeMode={Image.resizeMode.contain} source={avatar}/>
             <View style={styles.rightCtn}>
                 <View style={styles.spaceRow}>
                     <Text style={styles.nickname}>{nickname}</Text>
                     <View style={styles.topRow}>
                         <Icon name={'thumbs-up'} color="#999"/>
-                        <Text style={styles.praise}>{praise}</Text>
+                        <Text style={styles.praise}>{likes}</Text>
                     </View>
                 </View>
                 <Text
                     style={styles.content}>{content}</Text>
-                <View style={styles.reply}>
+                {reply && <View style={styles.reply}>
                     <Text style={styles.nickname}>//{reply}：<Text style={styles.replyCtn}>{replyCtn}</Text></Text>
-                </View>
-                <Text style={styles.date}>{date}</Text>
+                </View>}
+                <Text style={styles.date}>{coreUtil.timeSpan2Date(date)}</Text>
             </View>
         </View>
     }
@@ -44,6 +51,9 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         paddingVertical: 10,
         paddingHorizontal: 15,
+        backgroundColor: '#fff',
+        borderBottomWidth: StyleSheet.hairlineWidth,
+        borderBottomColor: '#ddd'
     },
     spaceRow: {
         flexDirection: 'row',
@@ -82,8 +92,9 @@ const styles = StyleSheet.create({
         marginTop: 10
     },
     replyCtn: {
-        color: '#999',
+        color: '#888',
         lineHeight: 18,
+        fontSize: 14
     },
     praise: {
         fontSize: 13,

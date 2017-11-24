@@ -79,7 +79,7 @@ export default class NewsDetail extends React.Component {
     }
 
     _renderToolBar() {
-        const { themeStore,newsId } = this.props;
+        const { themeStore, newsId } = this.props;
         const extra = themeStore.storyExtra;
         return <View style={styles.toolbar}>
             <IconButton icon={'angle-left'} onTap={Actions.pop}/>
@@ -87,7 +87,7 @@ export default class NewsDetail extends React.Component {
             <IconButton icon={'thumbs-o-up'} badge={extra.popularity}/>
             <IconButton icon={'share-square-o'}/>
             <IconButton icon={'commenting-o'} badge={extra.comments}
-                        onTap={() => Actions.commentList({ title: extra.comments + '条点评',newsId:newsId })}/>
+                        onTap={() => Actions.commentList({ title: extra.comments + '条点评', newsId: newsId, ...extra })}/>
         </View>
     }
 

@@ -16,8 +16,7 @@ export default class ThemeStore {
     @observable beforeNews = [];
     @observable newsDetail = {};
     @observable storyExtra = {};
-    @observable longComments = [];
-    @observable shortComments = [];
+    @observable comments = [];
 
     async getThemeList() {
         try {
@@ -105,43 +104,49 @@ export default class ThemeStore {
 
     }
 
-    async getLongComments(newsId) {
+    async getComments(newsId) {
         if (!newsId) {
             this.longComments = [];
-        } else {
-            try {
-                const server = api.API_LONG_COMMENTS.replace('NEWSID', newsId);
-                console.log(server);
-                const response = await axios.get(server);
-                this.longComments = response.data;
-                console.log(response.data);
-                return response.data;
-            } catch (e) {
-                console.log(e);
-                Alert.alert('连接异常', ERR_MSG);
-            }
-        }
-
-    }
-
-    async getShortComments(newsId) {
-        this.loading = true;
-        if (!newsId) {
-            this.loading = false;
             this.shortComments = [];
         } else {
             try {
-                const response = await axios.get(api.API_SHORT_COMMENTS.replace('NEWSID', newsId));
-                this.shortComments = response.data;
-                console.log(response.data);
-                this.loading = false;
-                return response.data;
+                const server = api.API_LONG_COMMENTS.replace('NEWSID', newsId);
+                const shortServer = api.API_SHORT_COMMENTS.replace('NEWSID', newsId);
+                const response = await axios.get(server);
+                const shortRes = await axios.get(shortServer);
+
+                const finalList = [];
+                finalList.push({ type: 'L', list: response.data.comments });
+                finalList.push({ type: 'S', list: shortRes.data.comments });
+
+                this.comments = finalList;
+                console.log('finalList', finalList);
             } catch (e) {
-                this.loading = false;
                 console.log(e);
                 Alert.alert('连接异常', ERR_MSG);
             }
         }
 
     }
+
+    // async getShortComments(newsId) {
+    //     this.loading = true;
+    //     if (!newsId) {
+    //         this.loading = false;
+    //         this.shortComments = [];
+    //     } else {
+    //         try {
+    //             const response = await axios.get(api.API_SHORT_COMMENTS.replace('NEWSID', newsId));
+    //             this.shortComments = response.data.comments;
+    //             console.log('short', response.data);
+    //             this.loading = false;
+    //             return response.data;
+    //         } catch (e) {
+    //             this.loading = false;
+    //             console.log(e);
+    //             Alert.alert('连接异常', ERR_MSG);
+    //         }
+    //     }
+    //
+    // }
 }

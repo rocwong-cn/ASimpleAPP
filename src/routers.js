@@ -3,7 +3,7 @@
  * desc:
  */
 import React from 'react';
-import { Drawer, Reducer, Router, Scene, Stack } from 'react-native-router-flux';
+import { Drawer, Reducer, Router, Scene, Stack,Actions } from 'react-native-router-flux';
 import DrawerContent from './containers/Drawer';
 import Home from './containers/home/index';
 import NewsDetail from './containers/home/NewsDetail';
@@ -15,7 +15,7 @@ import { BLUE } from './themes/core';
 const reducerCreate = params => {
     const defaultReducer = new Reducer(params);
     return (state, action) => {
-        console.log('ACTION:', action);
+        // console.log('ACTION:', action);
         return defaultReducer(state, action);
     };
 };
@@ -32,7 +32,7 @@ const Routers = () => (
             </Drawer>
             <Stack  key="newsDetail">
                 <Scene hideNavBar key="newsDetail" component={NewsDetail} back/>
-                <Scene backButtonTintColor="#fff" title="" titleStyle={{color:'#fff'}} navigationBarStyle={{backgroundColor:BLUE}} key="commentList" component={CommentList} back/>
+                <Scene backButtonTintColor="#fff" title="" titleStyle={{color:'#fff'}} onLeft={Actions.pop} navigationBarStyle={{backgroundColor:BLUE}} key="commentList" component={CommentList} back/>
             </Stack>
         </Stack>
     </Router>

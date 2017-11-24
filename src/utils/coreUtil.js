@@ -43,5 +43,20 @@ module.exports = {
         } else {
             return y + '年' + m + '月' + d + '日 ' + weekDay;
         }
+    },
+    timeSpan2Date: (timespan) => {
+        let date = new Date();
+        date.setTime(timespan * 1000);
+        let y = date.getFullYear();
+        let m = date.getMonth() + 1;
+        let d = date.getDate();
+
+        let h = date.getHours();
+        let _m = date.getMinutes();
+        let s = date.getSeconds();
+
+        y = y === new Date().getFullYear() ? '' : y + '-';//当年不显示年
+
+        return y + m + '-' + d + ' ' + h + ':' + _m + ':' + s;
     }
 };
