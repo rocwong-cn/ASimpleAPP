@@ -1,10 +1,9 @@
 import React from 'react';
-import { ScrollView, StyleSheet, Text, View, TouchableOpacity } from 'react-native';
-import { observer, inject } from 'mobx-react';
+import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { inject, observer } from 'mobx-react';
 import { Actions } from 'react-native-router-flux';
 import * as core from '../themes/core';
 import DrawerItem from '../components/vendors/DrawerItem';
-import _ from 'lodash';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
 @inject('themeStore')
@@ -25,12 +24,18 @@ class DrawerContent extends React.Component {
         return (
             <View style={styles.container}>
                 <Text style={styles.slogon}>🎈 A Simple APP .</Text>
-                <View style={{flex:1}}>
+                <View style={{ flex: 1 }}>
                     <DrawerItem title={'首页'} isSelected={'home' === selectedItem} onTap={this._toHome}
                                 rightIcon={'angle-right'} leftIcon={'home'}/>
+                    <DrawerItem title={'美图'} isSelected={'photo' === selectedItem}
+                                onTap={this._toOther.bind(this, 'photo')}
+                                rightIcon={'angle-right'} leftIcon={'picture-o'}/>
+                    <DrawerItem title={'好文'} isSelected={'file' === selectedItem}
+                                onTap={this._toOther.bind(this, 'file')}
+                                rightIcon={'angle-right'} leftIcon={'file-text-o'}/>
                     {/*{sortedThemes.map((item, i) => {*/}
-                        {/*return <DrawerItem key={i} isSelected={item.id === selectedItem} title={item.name}*/}
-                                           {/*rightIcon={'angle-right'} onTap={this._toOther.bind(this, item.id)}/>*/}
+                    {/*return <DrawerItem key={i} isSelected={item.id === selectedItem} title={item.name}*/}
+                    {/*rightIcon={'angle-right'} onTap={this._toOther.bind(this, item.id)}/>*/}
                     {/*})}*/}
                 </View>
                 <View style={{ flexDirection: 'row', paddingVertical: 15 }}>
