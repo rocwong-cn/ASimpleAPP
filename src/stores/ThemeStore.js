@@ -18,13 +18,13 @@ export default class ThemeStore {
     @observable newsDetail = {};
     @observable storyExtra = {};
     @observable comments = [];
+    @observable themeNews = [];
 
     async getThemeList() {
         this.homeLoading = true;
         try {
             const response = await axios.get(api.API_THEMES);
             this.themes = response.data.others;
-            console.log(response.data.others);
             this.homeLoading = false;
         } catch (e) {
             this.homeLoading = false;
@@ -59,13 +59,13 @@ export default class ThemeStore {
     }
 
     async getThemeNews(themeId) {
-        console.log(themeId);
         if (!themeId) {
-            this.latestNews = [];
+            this.themeNews = [];
         } else {
             try {
                 const response = await axios.get(api.API_THEME_NEWS + themeId);
-                this.latestNews = response.data.stories;
+                console.log(response.data)
+                this.themeNews = response.data.stories;
                 return response.data;
             } catch (e) {
                 console.log(e);
@@ -102,7 +102,6 @@ export default class ThemeStore {
             try {
                 const response = await axios.get(api.API_STORY_EXTRA + newsId);
                 this.storyExtra = response.data;
-                console.log(response.data);
                 return response.data;
             } catch (e) {
                 console.log(e);
@@ -114,8 +113,7 @@ export default class ThemeStore {
 
     async getComments(newsId) {
         if (!newsId) {
-            this.longComments = [];
-            this.shortComments = [];
+            this.comments = [];
         } else {
             try {
                 const server = api.API_LONG_COMMENTS.replace('NEWSID', newsId);
@@ -128,7 +126,6 @@ export default class ThemeStore {
                 finalList.push({ type: 'S', list: shortRes.data.comments });
 
                 this.comments = finalList;
-                console.log('finalList', finalList);
             } catch (e) {
                 console.log(e);
                 Alert.alert('连接异常', ERR_MSG);

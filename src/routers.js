@@ -3,14 +3,14 @@
  * desc:
  */
 import React from 'react';
-import { Drawer, Reducer, Router, Scene, Stack,Actions } from 'react-native-router-flux';
+import { Drawer, Reducer, Router, Scene, Stack, Actions } from 'react-native-router-flux';
 import DrawerContent from './containers/Drawer';
 import Home from './containers/news/index';
 import NewsDetail from './containers/news/NewsDetail';
 import CommentList from './containers/news/CommentList';
+import ThemeNews from './containers/news/ThemeNews';
 import { size } from './utils/coreUtil';
 import { BLUE } from './themes/core';
-
 
 const reducerCreate = params => {
     const defaultReducer = new Reducer(params);
@@ -29,11 +29,14 @@ const Routers = () => (
         <Stack hideNavBar key="root" titleStyle={{ alignSelf: 'center' }}>
             <Drawer key="drawer" contentComponent={DrawerContent} drawerWidth={DRAWER_WIDTH}>
                 <Scene hideNavBar key="home" component={Home} back/>
+                <Scene hideNavBar key="themeNews" component={ThemeNews} back/>
             </Drawer>
-            <Stack  key="newsDetail">
+            <Stack key="newsDetail">
                 <Scene hideNavBar key="newsDetail" component={NewsDetail} back/>
-                <Scene backButtonTintColor="#fff" title="" titleStyle={{color:'#fff'}} onLeft={Actions.pop} navigationBarStyle={{backgroundColor:BLUE}} key="commentList" component={CommentList} back/>
+                <Scene backButtonTintColor="#fff" title="" titleStyle={{ color: '#fff' }} onLeft={Actions.pop}
+                       navigationBarStyle={{ backgroundColor: BLUE }} key="commentList" component={CommentList} back/>
             </Stack>
+
         </Stack>
     </Router>
 );

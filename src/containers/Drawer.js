@@ -59,7 +59,6 @@ class DrawerContent extends React.Component {
 
     _toOther(id) {
         this.setState({ selectedItem: id });
-
     };
 }
 

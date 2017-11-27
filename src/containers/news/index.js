@@ -60,7 +60,7 @@ export default class extends React.Component {
         const sortedThemes = _.sortBy(themes, ['id']);
         return (
             <View style={styles.container}>
-                <NavBar bgColor={navBg} title={'首页'}
+                <NavBar bgColor={navBg} title={'首页'} isFixed={true}
                         leftIcon={'bars'} leftPress={Actions.drawerOpen}
                         rightIcon={'heart'} rightPress={this._toggleThemeList.bind(this, '1')}/>
                 {this._renderCarousel()}
@@ -71,7 +71,7 @@ export default class extends React.Component {
                 <DropDownPanel visible={visible} height={260} onClose={this._toggleThemeList.bind(this, '2')}
                                top={0} customStyle={styles.panel}>
                     {sortedThemes.map((item, i) => {
-                        return <Label key={i} txt={item.name}/>
+                        return <Label onTap={() => Actions.themeNews({ theme: item })} key={i} txt={item.name}/>
                     })}
                 </DropDownPanel>
 
@@ -87,7 +87,7 @@ export default class extends React.Component {
 
     _renderRow(data) {
         const row = data.item;
-        return <NewsItem onTap={() => Actions.newsDetail({ newsId: row.id })} title={row.title}
+        return <NewsItem onTap={() => Actions.newsDetail({ newsId: row.id, hasHeader: true })} title={row.title}
                          cover={{ uri: row.images[0] }}/>
     }
 
@@ -180,12 +180,12 @@ const styles = StyleSheet.create({
         height: BANNER_HEIGHT,
         backgroundColor: 'transparent',
     },
-    panel:{
-        flexDirection:'row',
-        flexWrap:'wrap',
-        paddingTop:25,
-        alignItems:'center',
-        backgroundColor:'#232a32'
+    panel: {
+        flexDirection: 'row',
+        flexWrap: 'wrap',
+        paddingTop: 25,
+        alignItems: 'center',
+        backgroundColor: '#232a32'
     }
 
 });

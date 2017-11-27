@@ -31,15 +31,47 @@ export default class NewsDetail extends React.Component {
         const { themeStore, newsId } = this.props;
         themeStore.getNewsDetail(newsId);
         themeStore.getStoryExtra(newsId);
+
+        this._handleStatusBar();
     }
 
     componentWillUnmount() {
         StatusBar.setBarStyle('light-content', false);
     }
 
+    _handleStatusBar() {
+        const { hasHeader } = this.props;
+        if (!hasHeader) {
+            this.setState({ statusBarBG: '#fff' });
+            StatusBar.setBarStyle('default', false);
+        }
+    }
+
     render() {
+        const { themeStore, hasHeader } = this.props;
+        const { statusBarBG } = this.state;
+        return <View style={styles.container}>
+            <View style={[{ backgroundColor: statusBarBG }, styles.statusBar]}/>
+            {hasHeader ? this._renderParallaxView() : this._renderWebview()}
+            {this._renderToolBar()}
+            <Loading visible={themeStore.loading}/>
+        </View>
+    }
+
+    _renderParallaxView() {
         const { themeStore } = this.props;
-        const { statusBarBG, windowHeight } = this.state;
+        return <ParallaxView
+            backgroundSource={{ uri: themeStore.newsDetail.image }}
+            windowHeight={200}
+            header={this._renderHeader(themeStore.newsDetail)}
+            onScroll={this._onScroll}>
+            {this._renderWebview()}
+        </ParallaxView>
+    }
+
+    _renderWebview() {
+        const { themeStore, hasHeader } = this.props;
+        const { windowHeight } = this.state;
         const css = themeStore.newsDetail.css ? themeStore.newsDetail.css[0] : '';
         let html = '<!DOCTYPE html><html><head><link rel="stylesheet" type="text/css" href="'
             + css + '" /></head><body>' + themeStore.newsDetail.body +
@@ -49,27 +81,17 @@ export default class NewsDetail extends React.Component {
         html = html.replace('<script type=“text/javascript”>window.daily=true</script>',
             '<script type="text/javascript">window.daily=true;function waitForBridge() {if (window.postMessage.length !== 1){setTimeout(waitForBridge, 200);}else {window.postMessage(document.body.scrollHeight+"")}} window.onload = waitForBridge; </script>');
         html = html.replace('img-place-holder', '');//剔除顶部的图片占位区
-        return <View style={styles.container}>
-            <View style={[{ backgroundColor: statusBarBG }, styles.statusBar]}/>
-            <ParallaxView
-                backgroundSource={{ uri: themeStore.newsDetail.image }}
-                windowHeight={200}
-                header={this._renderHeader(themeStore.newsDetail)}
-                onScroll={this._onScroll}>
-                <WebView
-                    automaticallyAdjustContentInsets={true}
-                    style={{ height: windowHeight }}
-                    source={{ html: html }}
-                    javaScriptEnabled={true}
-                    domStorageEnabled={true}
-                    decelerationRate="normal"
-                    scalesPageToFit={false} scrollEnabled={false}
-                    onMessage={this._onMessage}
-                />
-            </ParallaxView>
-            {this._renderToolBar()}
-            <Loading visible={themeStore.loading}/>
-        </View>
+
+        return <WebView
+            automaticallyAdjustContentInsets={true}
+            style={{ height: windowHeight }}
+            source={{ html: html }}
+            javaScriptEnabled={true}
+            domStorageEnabled={true}
+            decelerationRate="normal"
+            scalesPageToFit={false} scrollEnabled={!hasHeader}
+            onMessage={this._onMessage}
+        />
     }
 
     _renderHeader(detail) {

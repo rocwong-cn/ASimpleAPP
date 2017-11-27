@@ -18,18 +18,21 @@ export default class NavBar extends Component {
         leftPress: PropTypes.func,
         rightPress: PropTypes.func,
         bgColor: PropTypes.string,
+        isFixed: PropTypes.bool,
+        iconSize: PropTypes.number,
     };
 
     render() {
-        const { leftIcon, rightIcon, title, rightPress, leftPress, bgColor } = this.props;
-        return <View style={[styles.container, { backgroundColor: bgColor }]}>
+        const { leftIcon, rightIcon, title, rightPress, leftPress, bgColor, isFixed, iconSize } = this.props;
+        return <View style={[styles.container, { backgroundColor: bgColor }, isFixed && styles.fixed]}>
             <TouchableOpacity style={styles.button} onPress={leftPress}>
-                <Icon name={leftIcon} style={{ backgroundColor: 'transparent' }} size={20} color={'#fff'}/>
+                <Icon name={leftIcon} style={{ backgroundColor: 'transparent' }} size={iconSize || 20} color={'#fff'}/>
             </TouchableOpacity>
             <Text style={styles.title}>{title}</Text>
             <TouchableOpacity style={styles.button} onPress={rightPress}>
                 {rightIcon &&
-                <Icon name={rightIcon} style={{ backgroundColor: 'transparent' }} size={20} color={'#fff'}/>}
+                <Icon name={rightIcon} style={{ backgroundColor: 'transparent' }} size={iconSize || 20}
+                      color={'#fff'}/>}
             </TouchableOpacity>
         </View>
     }
@@ -41,6 +44,8 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         paddingTop: 20,
         height: H,
+    },
+    fixed: {
         position: 'absolute',
         top: 0,
         left: 0,

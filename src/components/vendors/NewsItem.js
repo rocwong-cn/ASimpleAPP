@@ -19,7 +19,8 @@ export default class NewsItem extends Component {
         const { cover, onTap, title } = this.props;
         return <TouchableOpacity onPress={onTap} style={styles.container} activeOpacity={0.9}>
             <Text numberOfLines={4} style={styles.txt}>{title}</Text>
-            <Image source={cover} style={styles.cover}/>
+            {cover &&
+            <Image defaultSource={require('../../images/default_pic.png')} source={cover} style={styles.cover}/>}
         </TouchableOpacity>
     }
 }
@@ -35,7 +36,8 @@ const styles = StyleSheet.create({
     },
     cover: {
         width: 100,
-        height: 82
+        height: 82,
+        resizeMode:'contain'
     },
     txt: {
         flexWrap: 'wrap',
