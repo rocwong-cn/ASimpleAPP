@@ -39,7 +39,7 @@ export default class ThemeNews extends React.Component {
         return (
             <View style={styles.container}>
                 <NavBar bgColor={core.BLUE} title={theme.name} iconSize={28}
-                        leftIcon={'angle-left'} leftPress={Actions.drawerOpen}/>
+                        leftIcon={'angle-left'} leftPress={Actions.pop}/>
                 <XFlatList data={themeStore.themeNews}
                            refreshing={false} onScroll={this._handleScroll} paging={paging} onRefresh={this._onInitData}
                            renderItem={this._renderRow} onPage={this._onPage}/>

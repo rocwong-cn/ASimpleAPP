@@ -71,13 +71,18 @@ export default class extends React.Component {
                 <DropDownPanel visible={visible} height={260} onClose={this._toggleThemeList.bind(this, '2')}
                                top={0} customStyle={styles.panel}>
                     {sortedThemes.map((item, i) => {
-                        return <Label onTap={() => Actions.themeNews({ theme: item })} key={i} txt={item.name}/>
+                        return <Label onTap={this._onLabelTap.bind(this,item)} key={i} txt={item.name}/>
                     })}
                 </DropDownPanel>
 
                 <Loading visible={themeStore.homeLoading}/>
             </View>
         );
+    }
+
+    _onLabelTap(item){
+        this.setState({ visible: false });
+        Actions.themeNews({ theme: item });
     }
 
     _toggleThemeList(t) {
@@ -122,7 +127,8 @@ export default class extends React.Component {
             autoplay={true}
             bullets={true}>
             {themeStore.topNews.map((item, i) => {
-                return <TouchableOpacity key={i} activeOpacity={0.9}>
+                return <TouchableOpacity key={i} activeOpacity={0.9}
+                                         onPress={() => Actions.newsDetail({ newsId: item.id, hasHeader: true })}>
                     <Text style={styles.title}>{item.title}</Text>
                     <Image style={[styles.topImg, { height }]} source={{ uri: item.image }}/>
                 </TouchableOpacity>;
@@ -151,7 +157,7 @@ const styles = StyleSheet.create({
         position: 'absolute',
         top: 0,
         left: 0,
-
+        zIndex: 1,
         right: 0
     },
     bulletStyle: {

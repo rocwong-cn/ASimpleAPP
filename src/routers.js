@@ -29,12 +29,15 @@ const Routers = () => (
         <Stack hideNavBar key="root" titleStyle={{ alignSelf: 'center' }}>
             <Drawer key="drawer" contentComponent={DrawerContent} drawerWidth={DRAWER_WIDTH}>
                 <Scene hideNavBar key="home" component={Home} back/>
-                <Scene hideNavBar key="themeNews" component={ThemeNews} back/>
+
             </Drawer>
             <Stack key="newsDetail">
                 <Scene hideNavBar key="newsDetail" component={NewsDetail} back/>
                 <Scene backButtonTintColor="#fff" title="" titleStyle={{ color: '#fff' }} onLeft={Actions.pop}
                        navigationBarStyle={{ backgroundColor: BLUE }} key="commentList" component={CommentList} back/>
+            </Stack>
+            <Stack key="themeNews">
+                <Scene hideNavBar key="themeNews" component={ThemeNews} back/>
             </Stack>
 
         </Stack>
