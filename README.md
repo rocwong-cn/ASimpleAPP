@@ -6,6 +6,8 @@
 ![home](https://github.com/rocwangv/ASimpleAPP/blob/master/screenshot/home.png)
 ![drawer](https://github.com/rocwangv/ASimpleAPP/blob/master/screenshot/drawer.png)
 
+You can also go [here](https://github.com/rocwangv/ASimpleAPP/tree/master/screenshot) to see more screenshot .
+
 ## USAGE
 ```
 git clone https://github.com/rocwangv/ASimpleAPP.git
@@ -25,4 +27,4 @@ react-native run-ios
 ## API source
 * [ZhihuDailyPurify](https://github.com/izzyleung/ZhihuDailyPurify)
 
-MIT Licensed
+#### MIT Licensed
