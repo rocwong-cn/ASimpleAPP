@@ -1,8 +1,8 @@
 import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, StatusBar, Image, } from "react-native";
+import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { Actions } from 'react-native-router-flux';
 import NavBar from '../../components/widgets/NavBar';
-import { observer, inject } from 'mobx-react';
+import { inject, observer } from 'mobx-react';
 import Carousel from '../../components/widgets/Carousel';
 import * as core from '../../utils/coreUtil';
 import NewsItem from '../../components/vendors/NewsItem';
@@ -10,6 +10,8 @@ import XFlatList from '../../components/widgets/XFlatList';
 import Loading from '../../components/widgets/Loading';
 import Label from '../../components/widgets/Label';
 import DropDownPanel from '../../components/widgets/DropDownPanel';
+import ProgressImage from 'react-native-image-progress';
+import ProgressCircle from 'react-native-progress/Circle';
 import _ from 'lodash';
 const BANNER_HEIGHT = 200;
 
@@ -130,7 +132,8 @@ export default class extends React.Component {
                 return <TouchableOpacity key={i} activeOpacity={0.9}
                                          onPress={() => Actions.newsDetail({ newsId: item.id, hasHeader: true })}>
                     <Text style={styles.title}>{item.title}</Text>
-                    <Image style={[styles.topImg, { height }]} source={{ uri: item.image }}/>
+                    <ProgressImage source={{ uri: item.image }} indicator={ProgressCircle}
+                                   style={[styles.topImg, { height }]} indicatorProps={{ color: '#2eb5ee' }}/>
                 </TouchableOpacity>;
             })}
         </Carousel>

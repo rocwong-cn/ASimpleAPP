@@ -4,9 +4,11 @@
  */
 
 import React, { Component } from 'react';
-import { TouchableOpacity, Text, Image, StyleSheet } from 'react-native';
+import { StyleSheet, Text, TouchableOpacity } from 'react-native';
 import PropTypes from 'prop-types';
 import * as core from '../../themes/core';
+import ProgressImage from 'react-native-image-progress';
+import ProgressCircle from 'react-native-progress/Circle';
 
 export default class NewsItem extends Component {
     static propTypes = {
@@ -19,8 +21,8 @@ export default class NewsItem extends Component {
         const { cover, onTap, title } = this.props;
         return <TouchableOpacity onPress={onTap} style={styles.container} activeOpacity={0.9}>
             <Text numberOfLines={4} style={styles.txt}>{title}</Text>
-            {cover &&
-            <Image defaultSource={require('../../images/default_pic.png')} source={cover} style={styles.cover}/>}
+            {cover && <ProgressImage source={cover} indicator={ProgressCircle} resizeMode='contain'
+                                     style={styles.cover} indicatorProps={{ color: '#2eb5ee' }}/>}
         </TouchableOpacity>
     }
 }
@@ -37,7 +39,6 @@ const styles = StyleSheet.create({
     cover: {
         width: 100,
         height: 82,
-        resizeMode:'contain'
     },
     txt: {
         flexWrap: 'wrap',

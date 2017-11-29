@@ -3,6 +3,7 @@ import { AppRegistry, StatusBar } from 'react-native';
 import { Provider } from 'mobx-react';
 import stores from './src/stores';
 import Routers from './src/routers';
+import SplashScreen from 'react-native-splash-screen';
 
 export default class ASimpleAPP extends Component {
     // 构造
@@ -11,6 +12,10 @@ export default class ASimpleAPP extends Component {
         super(props);
         // 初始状态
         this.state = {};
+    }
+
+    componentDidMount() {
+        SplashScreen.hide();
     }
 
     render() {

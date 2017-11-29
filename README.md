@@ -24,3 +24,5 @@ react-native run-ios
 
 ## API source
 * [ZhihuDailyPurify](https://github.com/izzyleung/ZhihuDailyPurify)
+
+MIT Licensed

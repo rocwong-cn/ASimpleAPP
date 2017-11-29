@@ -20,7 +20,7 @@ export default class NewsDetail extends React.Component {
         // 初始状态
         this.state = {
             windowHeight: 0,
-            statusBarBG: 'transparent'
+            statusBarBG: 'transparent',
         };
 
         this._onMessage = this._onMessage.bind(this);

@@ -19,6 +19,7 @@
     "react-native-parallax-view": "github:rocwangv/react-native-parallax-view",
     "react-native-progress": "^3.4.0",
     "react-native-router-flux": "^4.0.0-beta.24",
+    "react-native-splash-screen": "^3.0.6",
     "react-native-vector-icons": "^4.4.2"
   },
   "devDependencies": {
