@@ -51,6 +51,7 @@ export default class extends React.Component {
                            numColumns={2} horizontal={false} ItemSeparatorComponent={null}
                            data={gallery} renderItem={this._renderRow}
                            onRefresh={this._fetchData.bind(this, 1)} onPage={this._onPage}
+                           paging={galleryStore.galleryPaging}
                 />
             </View>
         );
