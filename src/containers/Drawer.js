@@ -28,7 +28,7 @@ class DrawerContent extends React.Component {
                     <DrawerItem title={'首页'} isSelected={'home' === selectedItem} onTap={this._toHome}
                                 rightIcon={'angle-right'} leftIcon={'home'}/>
                     <DrawerItem title={'美图'} isSelected={'photo' === selectedItem}
-                                onTap={this._toOther.bind(this, 'photo')}
+                                onTap={this._toGallery}
                                 rightIcon={'angle-right'} leftIcon={'picture-o'}/>
                     <DrawerItem title={'好文'} isSelected={'file' === selectedItem}
                                 onTap={this._toOther.bind(this, 'file')}
@@ -55,6 +55,11 @@ class DrawerContent extends React.Component {
     _toHome = () => {
         this.setState({ selectedItem: 'home' });
         Actions.home();
+    };
+
+    _toGallery = () => {
+        this.setState({ selectedItem: 'photo' });
+        Actions.gallery();
     };
 
     _toOther(id) {

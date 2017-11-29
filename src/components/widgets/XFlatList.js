@@ -25,13 +25,12 @@ export default class XFlatList extends PureComponent {
         getItemLayout: PropTypes.func,
         headerComponent: PropTypes.any,
         footerComponent: PropTypes.any,
-        separatorComponent: PropTypes.any,
         extra: PropTypes.any
     };
 
     render() {
         const {
-            data, headerComponent, footerComponent, separatorComponent,
+            data, headerComponent, footerComponent,
             extra, onRefresh, refreshing, onPage, renderItem, onScroll,
             getItemLayout
         } = this.props;
@@ -58,7 +57,7 @@ export default class XFlatList extends PureComponent {
                              ListFooterComponent={footerComponent || this._renderFooter()}
                              renderItem={renderItem}
                              getItemLayout={getItemLayout}
-                             data={data}/>
+                             data={data} {...this.props}/>
         }
         return (view)
     }

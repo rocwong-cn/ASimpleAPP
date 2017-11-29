@@ -12,4 +12,6 @@ module.exports = {
     API_STORY_EXTRA: 'https://news-at.zhihu.com/api/4/story-extra/',
     API_LONG_COMMENTS: 'https://news-at.zhihu.com/api/4/story/NEWSID/long-comments',
     API_SHORT_COMMENTS: 'https://news-at.zhihu.com/api/4/story/NEWSID/short-comments',
+
+    API_IMAGES: 'http://gank.io/api/data/福利/20/',//  pageSize(20)/pageNo
 };

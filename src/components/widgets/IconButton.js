@@ -22,9 +22,9 @@ export default class IconButton extends Component {
         const { icon, onTap, badge } = this.props;
         return <TouchableOpacity style={styles.button} onPress={onTap}>
             <Icon name={icon} style={{ backgroundColor: 'transparent' }} size={20} color={'#999'}/>
-            {badge && badge !== 0 && <View style={styles.badge}>
+            {badge || badge === 0 ? <View style={styles.badge}>
                 <Text style={styles.badgeTxt}>{badge}</Text>
-            </View>}
+            </View> : null}
         </TouchableOpacity>
     }
 }

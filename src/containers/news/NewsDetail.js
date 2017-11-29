@@ -74,8 +74,7 @@ export default class NewsDetail extends React.Component {
         const { windowHeight } = this.state;
         const css = themeStore.newsDetail.css ? themeStore.newsDetail.css[0] : '';
         let html = '<!DOCTYPE html><html><head><link rel="stylesheet" type="text/css" href="'
-            + css + '" /></head><body>' + themeStore.newsDetail.body +
-            '</body></html>';
+            + css + '" /></head><body>' + themeStore.newsDetail.body + '</body></html>';
 
         //替换原有的脚本，新增获取窗口高度的脚本
         html = html.replace('<script type=“text/javascript”>window.daily=true</script>',
