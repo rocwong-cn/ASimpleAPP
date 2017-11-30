@@ -2,12 +2,17 @@
 
 import axios from 'axios';
 import { observable } from 'mobx';
+import { persist } from 'mobx-persist';
 import { Alert } from 'react-native';
 import * as api from '../constants/api';
+import dark from '../themes/dark';
+import light from '../themes/light';
 
 const ERR_MSG = 'emmmm...服务器被小怪兽吃掉了...';
 
 export default class ThemeStore {
+
+    @persist @observable themeMode = 'light';//默认主题色，白天
 
     @observable loading = false;
     @observable homeLoading = false;
@@ -19,6 +24,10 @@ export default class ThemeStore {
     @observable storyExtra = {};
     @observable comments = [];
     @observable themeNews = [];
+
+    async changeMode() {
+        this.themeMode = this.themeMode === 'light' ? 'dark' : 'light';
+    }
 
     async getThemeList() {
         this.homeLoading = true;

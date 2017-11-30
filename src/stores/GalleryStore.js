@@ -8,7 +8,6 @@ import * as api from '../constants/api';
 const ERR_MSG = 'emmmm...服务器被小怪兽吃掉了...';
 
 export default class ThemeStore {
-
     @observable galleryLoading = false;
     @observable galleryPaging = false;
     @observable gallery = [];
@@ -17,7 +16,7 @@ export default class ThemeStore {
     async getGallery(pageNo) {
         if (pageNo === 1) {
             this.galleryPaging = true;
-        }else{
+        } else {
             this.galleryLoading = true;
         }
         try {
@@ -26,7 +25,7 @@ export default class ThemeStore {
             const response = await axios.get(server);
             if (pageNo === 1) {
                 this.galleryPaging = false;
-            }else{
+            } else {
                 this.galleryLoading = false;
             }
             const finalList = response.data.error ? [] : response.data.results;
@@ -37,7 +36,7 @@ export default class ThemeStore {
             console.log(e);
             if (pageNo === 1) {
                 this.galleryPaging = false;
-            }else{
+            } else {
                 this.galleryLoading = false;
             }
             Alert.alert('连接异常', ERR_MSG);

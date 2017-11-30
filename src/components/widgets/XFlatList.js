@@ -5,6 +5,7 @@
 import React, { PureComponent } from 'react';
 import { ActivityIndicator, FlatList, Text, TouchableOpacity, View, StyleSheet } from 'react-native';
 import PropTypes from 'prop-types';
+import light from '../../themes/light';
 
 export default class XFlatList extends PureComponent {
     // 构造
@@ -25,15 +26,18 @@ export default class XFlatList extends PureComponent {
         getItemLayout: PropTypes.func,
         headerComponent: PropTypes.any,
         footerComponent: PropTypes.any,
-        extra: PropTypes.any
+        extra: PropTypes.any,
+        themeStyle: PropTypes.object,
     };
 
     render() {
         const {
             data, headerComponent, footerComponent,
             extra, onRefresh, refreshing, onPage, renderItem, onScroll,
-            getItemLayout
+            getItemLayout, themeStyle
         } = this.props;
+
+        let _style = themeStyle || light;
 
         let view;
         if (!refreshing && data.length === 0) {
@@ -46,7 +50,7 @@ export default class XFlatList extends PureComponent {
                 </TouchableOpacity>;
         } else {
             view = <FlatList ListHeaderComponent={headerComponent}
-                             ItemSeparatorComponent={this._renderSeparator}
+                             ItemSeparatorComponent={this._renderSeparator.bind(this, _style)}
                              extraData={extra}
                              keyExtractor={this._keyExtractor}
                              onRefresh={onRefresh}
@@ -62,8 +66,9 @@ export default class XFlatList extends PureComponent {
         return (view)
     }
 
-    _renderSeparator = () => {
-        return <View style={styles.separator}/>
+    _renderSeparator(themeStyle) {
+
+        return <View style={[styles.separator, { borderBottomColor: themeStyle.BORDER_COLOR }]}/>
     };
 
     _keyExtractor(data, index) {

@@ -21,6 +21,9 @@ class DrawerContent extends React.Component {
 
     render() {
         const { selectedItem } = this.state;
+        const { themeStore } = this.props;
+        const isDaylight = themeStore.themeMode === 'light';
+        console.log('themeStore.themeMode==>',themeStore.themeMode);
         return (
             <View style={styles.container}>
                 <Text style={styles.slogon}>🎈 A Simple APP .</Text>
@@ -33,19 +36,15 @@ class DrawerContent extends React.Component {
                     <DrawerItem title={'好文'} isSelected={'file' === selectedItem}
                                 onTap={this._toOther.bind(this, 'file')}
                                 rightIcon={'angle-right'} leftIcon={'file-text-o'}/>
-                    {/*{sortedThemes.map((item, i) => {*/}
-                    {/*return <DrawerItem key={i} isSelected={item.id === selectedItem} title={item.name}*/}
-                    {/*rightIcon={'angle-right'} onTap={this._toOther.bind(this, item.id)}/>*/}
-                    {/*})}*/}
                 </View>
                 <View style={{ flexDirection: 'row', paddingVertical: 15 }}>
                     <TouchableOpacity style={styles.button}>
                         <Icon name="download" size={20} color={core.DRAWER_FONT_COLOR}/>
                         <Text style={styles.txt}>下载</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity style={styles.button}>
-                        <Icon name="moon-o" size={20} color={core.DRAWER_FONT_COLOR}/>
-                        <Text style={styles.txt}>夜间</Text>
+                    <TouchableOpacity style={styles.button} onPress={this._changeMode}>
+                        <Icon name={!isDaylight ? 'sun-o' : 'moon-o'} size={20} color={core.DRAWER_FONT_COLOR}/>
+                        <Text style={styles.txt}>{!isDaylight ? '白天' : '夜晚'}</Text>
                     </TouchableOpacity>
                 </View>
             </View>
@@ -64,6 +63,10 @@ class DrawerContent extends React.Component {
 
     _toOther(id) {
         this.setState({ selectedItem: id });
+    };
+
+    _changeMode = () => {
+        this.props.themeStore.changeMode();
     };
 }
 

@@ -6,21 +6,33 @@
 import React, { Component } from 'react';
 import { StyleSheet, Text, TouchableOpacity } from 'react-native';
 import PropTypes from 'prop-types';
-import * as core from '../../themes/core';
+import light from '../../themes/light';
 import ProgressImage from 'react-native-image-progress';
 import ProgressCircle from 'react-native-progress/Circle';
 
 export default class NewsItem extends Component {
+    // 构造
+    constructor(props) {
+        super(props);
+        // 初始状态
+        this.state = {};
+    }
+
     static propTypes = {
+        themeStyle: PropTypes.object,
         cover: PropTypes.object,
         title: PropTypes.string,
+        themeMode: PropTypes.string,
         onTap: PropTypes.func,
     };
 
     render() {
-        const { cover, onTap, title } = this.props;
-        return <TouchableOpacity onPress={onTap} style={styles.container} activeOpacity={0.9}>
-            <Text numberOfLines={4} style={styles.txt}>{title}</Text>
+        const { cover, onTap, title, themeStyle } = this.props;
+        const _style = themeStyle || light;
+        return <TouchableOpacity onPress={onTap}
+                                 style={[styles.container, { backgroundColor: _style.BG_COLOR }]}
+                                 activeOpacity={0.9}>
+            <Text numberOfLines={4} style={[styles.txt, { color: _style.FONT_COLOR }]}>{title}</Text>
             {cover && <ProgressImage source={cover} indicator={ProgressCircle} resizeMode='contain'
                                      style={styles.cover} indicatorProps={{ color: '#2eb5ee' }}/>}
         </TouchableOpacity>
@@ -33,8 +45,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         paddingVertical: 10,
         paddingHorizontal: 15,
-        height: 102,
-        backgroundColor: core.THEME.BG_COLOR
+        height: 102
     },
     cover: {
         width: 100,

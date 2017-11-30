@@ -13,6 +13,8 @@ import DropDownPanel from '../../components/widgets/DropDownPanel';
 import ProgressImage from 'react-native-image-progress';
 import ProgressCircle from 'react-native-progress/Circle';
 import _ from 'lodash';
+import dark from '../../themes/dark';
+import light from '../../themes/light';
 const BANNER_HEIGHT = 200;
 
 @inject('themeStore')
@@ -33,7 +35,6 @@ export default class extends React.Component {
             visible: false
         };
 
-        this._renderRow = this._renderRow.bind(this);
         this._onPage = this._onPage.bind(this);
         this._handleScroll = this._handleScroll.bind(this);
         this._onInitData = this._onInitData.bind(this);
@@ -57,9 +58,10 @@ export default class extends React.Component {
     render() {
         const { themeStore } = this.props;
         const { navBg, beforeNews, paging, visible } = this.state;
-
         const themes = themeStore.themes;
         const sortedThemes = _.sortBy(themes, ['id']);
+        console.log(themeStore.themeMode)
+        const themeStyle = themeStore.themeMode === 'light' ? light : dark;
         return (
             <View style={styles.container}>
                 <NavBar bgColor={navBg} title={'首页'} isFixed={true}
@@ -68,12 +70,14 @@ export default class extends React.Component {
                 {this._renderCarousel()}
                 <XFlatList data={themeStore.latestNews.concat(beforeNews)} headerComponent={this._renderHeader()}
                            refreshing={false} onScroll={this._handleScroll} paging={paging} onRefresh={this._onInitData}
-                           renderItem={this._renderRow} onPage={this._onPage}/>
+                           renderItem={this._renderRow.bind(this, themeStyle)} onPage={this._onPage}
+                           themeStyle={themeStyle}
+                />
 
                 <DropDownPanel visible={visible} height={260} onClose={this._toggleThemeList.bind(this, '2')}
                                top={0} customStyle={styles.panel}>
                     {sortedThemes.map((item, i) => {
-                        return <Label onTap={this._onLabelTap.bind(this,item)} key={i} txt={item.name}/>
+                        return <Label onTap={this._onLabelTap.bind(this, item)} key={i} txt={item.name}/>
                     })}
                 </DropDownPanel>
 
@@ -82,7 +86,7 @@ export default class extends React.Component {
         );
     }
 
-    _onLabelTap(item){
+    _onLabelTap(item) {
         this.setState({ visible: false });
         Actions.themeNews({ theme: item });
     }
@@ -92,10 +96,10 @@ export default class extends React.Component {
         this.setState({ visible: visible });
     }
 
-    _renderRow(data) {
+    _renderRow(themeStyle, data) {
         const row = data.item;
         return <NewsItem onTap={() => Actions.newsDetail({ newsId: row.id, hasHeader: true })} title={row.title}
-                         cover={{ uri: row.images[0] }}/>
+                         cover={{ uri: row.images[0] }} themeStyle={themeStyle}/>
     }
 
     _renderHeader() {
@@ -143,7 +147,7 @@ export default class extends React.Component {
         this.setState({ canLoad: true });
         let positionY = event.nativeEvent.contentOffset.y;
         if (positionY > 0) {
-            this.setState({ navBg: '#rgba(25,145,212,' + positionY / 80 + ')', positionY });
+            this.setState({ navBg: 'rgba(25,145,212,' + positionY / 80 + ')', positionY });
         } else {
             this.setState({ navBg: 'transparent', positionY });
         }
