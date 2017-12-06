@@ -1,4 +1,4 @@
-package com.asimpleapp;
+package cc.rocwang.simple;
 
 import android.app.Application;
 
