@@ -4,6 +4,8 @@ import { Provider } from 'mobx-react';
 import stores from './src/stores';
 import Routers from './src/routers';
 import SplashScreen from 'react-native-splash-screen';
+import * as WeChat from 'react-native-wechat';
+
 
 export default class ASimpleAPP extends Component {
     // 构造
@@ -16,6 +18,7 @@ export default class ASimpleAPP extends Component {
 
     componentDidMount() {
         SplashScreen.hide();
+        WeChat.registerApp('appid');
     }
 
     render() {

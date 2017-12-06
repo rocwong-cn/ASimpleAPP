@@ -5,6 +5,7 @@ import { Actions } from 'react-native-router-flux';
 import * as core from '../themes/core';
 import DrawerItem from '../components/vendors/DrawerItem';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import { toastShort } from '../components/widgets/Toast';
 
 @inject('themeStore')
 @observer
@@ -23,7 +24,7 @@ class DrawerContent extends React.Component {
         const { selectedItem } = this.state;
         const { themeStore } = this.props;
         const isDaylight = themeStore.themeMode === 'light';
-        console.log('themeStore.themeMode==>',themeStore.themeMode);
+        console.log('themeStore.themeMode==>', themeStore.themeMode);
         return (
             <View style={styles.container}>
                 <Text style={styles.slogon}>🎈 A Simple APP .</Text>
@@ -34,11 +35,11 @@ class DrawerContent extends React.Component {
                                 onTap={this._toGallery}
                                 rightIcon={'angle-right'} leftIcon={'picture-o'}/>
                     {/*<DrawerItem title={'好文'} isSelected={'file' === selectedItem}*/}
-                                {/*onTap={this._toOther.bind(this, 'file')}*/}
-                                {/*rightIcon={'angle-right'} leftIcon={'file-text-o'}/>*/}
+                    {/*onTap={this._toOther.bind(this, 'file')}*/}
+                    {/*rightIcon={'angle-right'} leftIcon={'file-text-o'}/>*/}
                 </View>
                 <View style={{ flexDirection: 'row', paddingVertical: 15 }}>
-                    <TouchableOpacity style={styles.button}>
+                    <TouchableOpacity style={styles.button} onPress={() => toastShort('暂不支持')}>
                         <Icon name="download" size={20} color={core.DRAWER_FONT_COLOR}/>
                         <Text style={styles.txt}>下载</Text>
                     </TouchableOpacity>

@@ -10,6 +10,9 @@ import IconButton from '../../components/widgets/IconButton';
 import Loading from '../../components/widgets/Loading';
 import { Actions } from 'react-native-router-flux';
 import ParallaxView from 'react-native-parallax-view';
+import Share from '../../components/widgets/Share';
+import { SHARE_DATA }  from '../../constants/common';
+import { toastShort } from '../../components/widgets/Toast';
 
 @inject('themeStore')
 @observer
@@ -21,6 +24,7 @@ export default class NewsDetail extends React.Component {
         this.state = {
             windowHeight: 0,
             statusBarBG: 'transparent',
+            shareVisible: false
         };
 
         this._onMessage = this._onMessage.bind(this);
@@ -49,12 +53,14 @@ export default class NewsDetail extends React.Component {
 
     render() {
         const { themeStore, hasHeader } = this.props;
-        const { statusBarBG } = this.state;
+        const { statusBarBG, shareVisible } = this.state;
         return <View style={styles.container}>
             <View style={[{ backgroundColor: statusBarBG }, styles.statusBar]}/>
             {hasHeader ? this._renderParallaxView() : this._renderWebview()}
             {this._renderToolBar()}
             <Loading visible={themeStore.loading}/>
+            <Share visible={shareVisible} modal={true} data={SHARE_DATA} showText={true}
+                   onHide={() => this.setState({ shareVisible: false })}/>
         </View>
     }
 
@@ -106,8 +112,8 @@ export default class NewsDetail extends React.Component {
         return <View style={styles.toolbar}>
             <IconButton icon={'angle-left'} onTap={Actions.pop}/>
             <IconButton icon={'angle-down'}/>
-            <IconButton icon={'thumbs-o-up'} badge={extra.popularity}/>
-            <IconButton icon={'share-square-o'}/>
+            <IconButton icon={'thumbs-o-up'} badge={extra.popularity} onTap={() => toastShort('暂不支持')}/>
+            <IconButton icon={'share-square-o'} onTap={() => this.setState({ shareVisible: true })}/>
             <IconButton icon={'commenting-o'} badge={extra.comments}
                         onTap={() => Actions.commentList({ title: extra.comments + '条点评', newsId: newsId, ...extra })}/>
         </View>

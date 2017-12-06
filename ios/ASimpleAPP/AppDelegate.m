@@ -11,6 +11,7 @@
 
 #import <React/RCTBundleURLProvider.h>
 #import <React/RCTRootView.h>
+#import <React/RCTLinkingManager.h>
 #import "SplashScreen.h"
 
 @implementation AppDelegate
@@ -37,8 +38,14 @@
   self.window.rootViewController = rootViewController;
   [self.window makeKeyAndVisible];
   
-  [SplashScreen show];  // SplashScreen
+//  [SplashScreen show];  // SplashScreen
   return YES;
+}
+
+- (BOOL)application:(UIApplication *)application openURL:(NSURL *)url
+            options:(NSDictionary<NSString*, id> *)options
+{
+  return [RCTLinkingManager application:application openURL:url options:options];
 }
 
 @end
