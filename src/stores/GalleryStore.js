@@ -14,7 +14,8 @@ export default class ThemeStore {
     @observable pageNo = 1;
 
     async getGallery(pageNo) {
-        if (pageNo === 1) {
+        const isFirstPage = pageNo === 1;
+        if (isFirstPage) {
             this.galleryPaging = true;
         } else {
             this.galleryLoading = true;
@@ -23,7 +24,7 @@ export default class ThemeStore {
             const server = api.API_IMAGES + `${pageNo}`;
             console.log('server=>', server);
             const response = await axios.get(server);
-            if (pageNo === 1) {
+            if (isFirstPage) {
                 this.galleryPaging = false;
             } else {
                 this.galleryLoading = false;
@@ -34,7 +35,7 @@ export default class ThemeStore {
             return { pageNo: pageNo + 1, list: response.data.results };
         } catch (e) {
             console.log(e);
-            if (pageNo === 1) {
+            if (isFirstPage) {
                 this.galleryPaging = false;
             } else {
                 this.galleryLoading = false;

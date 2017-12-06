@@ -33,9 +33,9 @@ class DrawerContent extends React.Component {
                     <DrawerItem title={'美图'} isSelected={'photo' === selectedItem}
                                 onTap={this._toGallery}
                                 rightIcon={'angle-right'} leftIcon={'picture-o'}/>
-                    <DrawerItem title={'好文'} isSelected={'file' === selectedItem}
-                                onTap={this._toOther.bind(this, 'file')}
-                                rightIcon={'angle-right'} leftIcon={'file-text-o'}/>
+                    {/*<DrawerItem title={'好文'} isSelected={'file' === selectedItem}*/}
+                                {/*onTap={this._toOther.bind(this, 'file')}*/}
+                                {/*rightIcon={'angle-right'} leftIcon={'file-text-o'}/>*/}
                 </View>
                 <View style={{ flexDirection: 'row', paddingVertical: 15 }}>
                     <TouchableOpacity style={styles.button}>

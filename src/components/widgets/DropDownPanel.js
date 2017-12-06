@@ -20,8 +20,8 @@ export default class DropDownPanel extends Component {
     }
 
     static propTypes = {
-        visible: PropTypes.bool,
-        onClose: PropTypes.func,
+        visible: PropTypes.bool.isRequired,
+        onClose: PropTypes.func.isRequired,
         top: PropTypes.number,
         height: PropTypes.number,
         customStyle: PropTypes.any,
@@ -32,6 +32,12 @@ export default class DropDownPanel extends Component {
         if (nextProps.visible && nextProps.height !== 0) {
             this._startAnimated(nextProps.height);
         }
+        if (!nextProps.visible) {
+            this.setState({
+                heightAnim: new Animated.Value(0),
+                opacityAnim: new Animated.Value(0)
+            });
+        }
     }
 
     render() {
@@ -39,11 +45,11 @@ export default class DropDownPanel extends Component {
             return null;
         }
 
-        const { children, onClose, top, customStyle } = this.props;
+        const { children, top, customStyle } = this.props;
         let topStyle;
         topStyle = top ? { top: top } : null;
         return (
-            <TouchableWithoutFeedback onPress={onClose} onLayout={this._startAnimated.bind(this)}>
+            <TouchableWithoutFeedback onPress={this._onHide.bind(this)} onLayout={this._startAnimated.bind(this)}>
                 <Animated.View style={[styles.container, { opacity: this.state.opacityAnim }, topStyle]}>
                     <TouchableWithoutFeedback>
                         <Animated.View style={[styles.content, { height: this.state.heightAnim }, customStyle]}>
@@ -53,6 +59,22 @@ export default class DropDownPanel extends Component {
                 </Animated.View>
             </TouchableWithoutFeedback>
         )
+    }
+
+    _onHide() {
+        const { onClose } = this.props;
+        if (!onClose) {
+            console.warn('onClose function is required !!')
+            return;
+        }
+        Animated.parallel([
+            Animated.spring(this.state.opacityAnim, {
+                toValue: 0
+            }),
+            Animated.spring(this.state.heightAnim, {
+                toValue: 0
+            }),
+        ]).start(onClose);
     }
 
     _startAnimated(height) {
@@ -79,7 +101,7 @@ const styles = StyleSheet.create({
         top: 0,
         bottom: 0,
         backgroundColor: 'rgba(0, 0, 0, 0.5)',
-        zIndex:99
+        zIndex: 99
     },
     content: {
         backgroundColor: '#fff',
