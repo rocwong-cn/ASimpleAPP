@@ -38,7 +38,7 @@
   self.window.rootViewController = rootViewController;
   [self.window makeKeyAndVisible];
   
-//  [SplashScreen show];  // SplashScreen
+  [SplashScreen show];  // SplashScreen
   return YES;
 }
 

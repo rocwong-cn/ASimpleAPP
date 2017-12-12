@@ -18,7 +18,7 @@ export default class ASimpleAPP extends Component {
 
     componentDidMount() {
         SplashScreen.hide();
-        WeChat.registerApp('appid');
+        WeChat.registerApp('wx49872f6281adece6');
     }
 
     render() {

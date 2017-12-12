@@ -24,7 +24,6 @@ class DrawerContent extends React.Component {
         const { selectedItem } = this.state;
         const { themeStore } = this.props;
         const isDaylight = themeStore.themeMode === 'light';
-        console.log('themeStore.themeMode==>', themeStore.themeMode);
         return (
             <View style={styles.container}>
                 <Text style={styles.slogon}>🎈 A Simple APP .</Text>

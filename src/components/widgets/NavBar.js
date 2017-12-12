@@ -4,11 +4,12 @@
  */
 
 import React, { Component } from 'react';
-import { View, TouchableOpacity, Text, StyleSheet } from 'react-native';
+import { View, TouchableOpacity, Text, StyleSheet, Platform } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import PropTypes from 'prop-types';
 
-const H = 65;
+const H = Platform.select({ ios: 65, android: 50 });
+const SPACE = Platform.select({ ios: 20, android: 0 });
 const W = 50;
 export default class NavBar extends Component {
     static propTypes = {
@@ -42,7 +43,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
-        paddingTop: 20,
+        paddingTop: SPACE,
         height: H,
     },
     fixed: {

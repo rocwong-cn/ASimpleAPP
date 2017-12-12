@@ -79,7 +79,10 @@ export default class NewsDetail extends React.Component {
         const { themeStore, hasHeader } = this.props;
         const { windowHeight } = this.state;
         const css = themeStore.newsDetail.css ? themeStore.newsDetail.css[0] : '';
-        let html = '<!DOCTYPE html><html><head><link rel="stylesheet" type="text/css" href="'
+        let html = '<!DOCTYPE html><html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8" />' +
+            '<meta name="viewport" content="width=device-width,height=device-height,' +
+            ' user-scalable=no,initial-scale=1, minimum-scale=1, maximum-scale=1,target-densitydpi=device-dpi ">' +
+            '<link rel="stylesheet" type="text/css" href="'
             + css + '" /></head><body>' + themeStore.newsDetail.body + '</body></html>';
 
         //替换原有的脚本，新增获取窗口高度的脚本
