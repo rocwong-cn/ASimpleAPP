@@ -93,7 +93,7 @@ export default class NewsDetail extends React.Component {
         return <WebView
             automaticallyAdjustContentInsets={true}
             style={{ height: windowHeight }}
-            source={{ html: html }}
+            source={{ html: html,baseUrl:'' }}
             javaScriptEnabled={true}
             domStorageEnabled={true}
             decelerationRate="normal"

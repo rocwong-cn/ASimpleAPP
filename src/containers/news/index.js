@@ -60,7 +60,6 @@ export default class extends React.Component {
         const { navBg, beforeNews, paging, visible } = this.state;
         const themes = themeStore.themes;
         const sortedThemes = _.sortBy(themes, ['id']);
-        console.log(themeStore.themeMode)
         const themeStyle = themeStore.themeMode === 'light' ? light : dark;
         return (
             <View style={styles.container}>
