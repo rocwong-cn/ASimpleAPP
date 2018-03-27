@@ -9,6 +9,12 @@
 
 You can also go [here](https://github.com/rocwangv/ASimpleAPP/tree/master/screenshot) to see more screenshot .
 
+## APK Download
+
+You can download by [this](https://www.pgyer.com/zKFX) link,or scan the qrcode below.
+
+![qrcode](https://www.pgyer.com/app/qrcode/zKFX)
+
 ## USAGE
 ```
 git clone https://github.com/rocwangv/ASimpleAPP.git
